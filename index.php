@@ -2,6 +2,7 @@
 
 <html>
 <head>
+<link id="default" rel="stylesheet" href="css/default.css">
 </head>
 
 <body>
