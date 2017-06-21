@@ -11,7 +11,7 @@
 <script src='lib/fullcalendar/fullcalendar.js'></script>
 </head>
 <body>
-<h1><% out.println("Hello Azure!"); %></h1>
+<h1><% out.println("Auto Calendar"); %></h1>
 <div id='calendar'></div>
 </body>
 <script>
@@ -20,6 +20,26 @@ $(document).ready(function() {
     // page is now ready, initialize the calendar...
 
     $('#calendar').fullCalendar({
+    	customButtons: {
+            addEvent: {
+                text: 'Add Event',
+                click: function() {
+                    alert('Added event!');
+                }
+            },
+            addTask: {
+                text: 'Add Task',
+                click: function() {
+                    alert('Added task!');
+                }
+            }
+        },
+    	header:	{
+    		left:   'prev,next addEvent addTask title',
+            center: '',
+            right:  'today'
+    	}
+    	
         // put your options and callbacks here
     })
 
