@@ -1,0 +1,99 @@
+!SESSION 2017-06-20 18:38:42.898 -----------------------------------------------
+eclipse.buildId=4.6.3.M20170301-0400
+java.version=1.8.0_131
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.jee.product -product org.eclipse.epp.package.jee.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.jee.product -data D:\Workdir\AutoCalendar -product org.eclipse.epp.package.jee.product
+
+!ENTRY com.microsoft.azuretools.core 1 0 2017-06-20 18:38:46.023
+!MESSAGE Plugin folder path:C:\Users\brent\.p2\pool\plugins
+
+!ENTRY org.eclipse.ui 4 4 2017-06-20 18:38:47.805
+!MESSAGE Referenced part does not exist yet: org.eclipse.jdt.ui.PackageExplorer.
+
+!ENTRY org.eclipse.egit.ui 2 0 2017-06-20 18:38:56.986
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\brent'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.m2e.logback.appender 2 0 2017-06-20 18:39:01.046
+!MESSAGE 
+!SESSION 2017-06-20 18:40:48.509 -----------------------------------------------
+eclipse.buildId=4.6.3.M20170301-0400
+java.version=1.8.0_131
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.jee.product -product org.eclipse.epp.package.jee.product -product org.eclipse.epp.package.jee.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.jee.product -product org.eclipse.epp.package.jee.product -data D:\Workdir\AutoCalendar -product org.eclipse.epp.package.jee.product
+
+!ENTRY com.microsoft.azuretools.core 1 0 2017-06-20 18:40:51.665
+!MESSAGE Plugin folder path:C:\Users\brent\.p2\pool\plugins
+
+!ENTRY org.eclipse.egit.ui 2 0 2017-06-20 18:40:55.050
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\brent'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.m2e.logback.appender 2 0 2017-06-20 18:42:28.899
+!MESSAGE 
+
+!ENTRY org.eclipse.egit.ui 4 0 2017-06-20 18:43:18.445
+!MESSAGE Invalid project description.
+!STACK 1
+org.eclipse.core.internal.resources.ResourceException: Invalid project description.
+	at org.eclipse.core.internal.resources.Project.checkDescription(Project.java:169)
+	at org.eclipse.core.internal.resources.Project.assertCreateRequirements(Project.java:53)
+	at org.eclipse.core.internal.resources.Project.create(Project.java:263)
+	at org.eclipse.core.internal.resources.Project.create(Project.java:247)
+	at org.eclipse.egit.ui.internal.clone.ProjectUtils.createExistingProject(ProjectUtils.java:180)
+	at org.eclipse.egit.ui.internal.clone.ProjectUtils.access$0(ProjectUtils.java:141)
+	at org.eclipse.egit.ui.internal.clone.ProjectUtils$1.run(ProjectUtils.java:99)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2240)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2262)
+	at org.eclipse.egit.ui.internal.clone.ProjectUtils.createProjects(ProjectUtils.java:133)
+	at org.eclipse.egit.ui.internal.clone.ProjectUtils.createProjects(ProjectUtils.java:60)
+	at org.eclipse.egit.ui.internal.clone.GitImportWizard.importProjects(GitImportWizard.java:254)
+	at org.eclipse.egit.ui.internal.clone.GitImportWizard.access$2(GitImportWizard.java:236)
+	at org.eclipse.egit.ui.internal.clone.GitImportWizard$4.run(GitImportWizard.java:206)
+	at org.eclipse.jface.operation.ModalContext$ModalContextThread.run(ModalContext.java:119)
+Contains: OK
+Contains: D:\Workdir\AutoCalendar overlaps the workspace location: D:\Workdir\AutoCalendar
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2017-06-20 18:43:18.446
+!MESSAGE Invalid project description.
+!SUBENTRY 2 unknown 0 0 2017-06-20 18:43:18.446
+!MESSAGE OK
+!SUBENTRY 2 org.eclipse.core.resources 4 77 2017-06-20 18:43:18.446
+!MESSAGE D:\Workdir\AutoCalendar overlaps the workspace location: D:\Workdir\AutoCalendar
+
+!ENTRY org.eclipse.egit.ui 4 0 2017-06-20 18:43:30.006
+!MESSAGE Invalid project description.
+!STACK 1
+org.eclipse.core.internal.resources.ResourceException: Invalid project description.
+	at org.eclipse.core.internal.resources.Project.checkDescription(Project.java:169)
+	at org.eclipse.core.internal.resources.Project.assertCreateRequirements(Project.java:53)
+	at org.eclipse.core.internal.resources.Project.create(Project.java:263)
+	at org.eclipse.core.internal.resources.Project.create(Project.java:247)
+	at org.eclipse.egit.ui.internal.clone.ProjectUtils.createExistingProject(ProjectUtils.java:180)
+	at org.eclipse.egit.ui.internal.clone.ProjectUtils.access$0(ProjectUtils.java:141)
+	at org.eclipse.egit.ui.internal.clone.ProjectUtils$1.run(ProjectUtils.java:99)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2240)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2262)
+	at org.eclipse.egit.ui.internal.clone.ProjectUtils.createProjects(ProjectUtils.java:133)
+	at org.eclipse.egit.ui.internal.clone.ProjectUtils.createProjects(ProjectUtils.java:60)
+	at org.eclipse.egit.ui.internal.clone.GitImportWizard.importProjects(GitImportWizard.java:254)
+	at org.eclipse.egit.ui.internal.clone.GitImportWizard.access$2(GitImportWizard.java:236)
+	at org.eclipse.egit.ui.internal.clone.GitImportWizard$4.run(GitImportWizard.java:206)
+	at org.eclipse.jface.operation.ModalContext$ModalContextThread.run(ModalContext.java:119)
+Contains: OK
+Contains: D:\Workdir\AutoCalendar overlaps the workspace location: D:\Workdir\AutoCalendar
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2017-06-20 18:43:30.006
+!MESSAGE Invalid project description.
+!SUBENTRY 2 unknown 0 0 2017-06-20 18:43:30.006
+!MESSAGE OK
+!SUBENTRY 2 org.eclipse.core.resources 4 77 2017-06-20 18:43:30.006
+!MESSAGE D:\Workdir\AutoCalendar overlaps the workspace location: D:\Workdir\AutoCalendar
