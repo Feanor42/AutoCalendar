@@ -28,10 +28,6 @@ public class CallDatabase extends HttpServlet {
         	    Class.forName(driver).newInstance();
                 connection = DriverManager.getConnection(url);
                 String schema = connection.getSchema();
-                System.out.println("Successful connection - Schema: " + schema);
-
-                System.out.println("Query data example:");
-                System.out.println("=========================================");
 
                 // Create and execute a SELECT SQL statement.
                 String selectSql = "SELECT * FROM [User]";

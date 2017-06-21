@@ -11,6 +11,13 @@
 <script src='lib/fullcalendar/fullcalendar.js'></script>
 </head>
 <body>
+	<!-- DELETE THIS FORM BELOW ONCE FINISHED WITH IT.  THIS IS JUST BRENTS EXAMPLE OF ONE FORM OF A JAVA CALL -->
+	<form action = "CallDatabase" method = "GET">
+		<button type ="submit" action = "CallDatabase">
+			Press for DB Call
+		</button>
+	</form>
+	<!-- DELETE THE FORM ABOVE -->
 <h1><% out.println("Auto Calendar"); %></h1>
 <div id='calendar'></div>
 </body>
