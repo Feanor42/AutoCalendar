@@ -4,9 +4,25 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Auto Calendar</title>
+<link rel='stylesheet' href='lib/fullcalendar/fullcalendar.css' />
+<script src='lib/jquery.js'></script>
+<script src='lib/moment.js'></script>
+<script src='lib/fullcalendar/fullcalendar.js'></script>
 </head>
 <body>
 <h1><% out.println("Hello Azure!"); %></h1>
+<div id='calendar'></div>
 </body>
+<script>
+$(document).ready(function() {
+
+    // page is now ready, initialize the calendar...
+
+    $('#calendar').fullCalendar({
+        // put your options and callbacks here
+    })
+
+});
+</script>
 </html>
