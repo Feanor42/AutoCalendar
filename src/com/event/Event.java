@@ -17,7 +17,7 @@ public class Event {
 	private String location;
 	private Identifier identifier;
 	
-	//default constructer
+	//default constructor
 	public Event()
 	{
 		startDate = null;
@@ -31,7 +31,7 @@ public class Event {
 		
 	}
 	
-	//Overloaded constructer
+	//Overloaded constructor
 	public Event(Date sd, Date ed, Time st, Time et, String tit, String desc, String loc, Identifier id)
 	{
 		startDate = sd;
