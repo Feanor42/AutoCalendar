@@ -2,7 +2,7 @@ package com.event;
 
 import java.util.Date;
 import java.sql.Time;
-import com.event.Identifier;
+
 
 
 public class Event {
@@ -17,7 +17,7 @@ public class Event {
 	private String location;
 	private Identifier identifier;
 	
-	//default constructor
+	//default constructer
 	public Event()
 	{
 		startDate = null;
@@ -31,7 +31,7 @@ public class Event {
 		
 	}
 	
-	//Overloaded constructor
+	//Overloaded constructer
 	public Event(Date sd, Date ed, Time st, Time et, String tit, String desc, String loc, Identifier id)
 	{
 		startDate = sd;
@@ -119,4 +119,12 @@ public class Event {
 	{
 		location = l;
 	}
+	
+//	public Time getLength()
+//	{
+//		Time difference = new Time(0, 0, 0);
+//		difference.setHours(endTime.getHours()-startTime.getHours());
+//		difference.setMinutes(endTime.getMinutes()-startTime.getMinutes());
+//		return difference;
+//	}
 }
