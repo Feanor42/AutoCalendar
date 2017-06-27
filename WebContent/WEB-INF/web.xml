@@ -14,11 +14,11 @@
         <welcome-file>Auto_Calendar/index.jsp</welcome-file>
     </welcome-file-list>
     <servlet>
-        <servlet-name>Hello</servlet-name>
+        <servlet-name>CallDatabase</servlet-name>
         <servlet-class>com.calldatabase.jsp.servlet.CallDatabase</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>Hello</servlet-name>
+        <servlet-name>CallDatabase</servlet-name>
         <url-pattern>/CallDatabase</url-pattern>
     </servlet-mapping>
 </web-app>
