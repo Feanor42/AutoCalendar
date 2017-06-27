@@ -5,6 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Auto Calendar</title>
+<link rel='stylesheet' href='css/default.css' />
 <link rel='stylesheet' href='lib/fullcalendar/fullcalendar.css' />
 <script src='lib/jquery.js'></script>
 <script src='lib/moment.js'></script>
@@ -18,35 +19,14 @@
 		</button>
 	</form>
 	<!-- DELETE THE FORM ABOVE -->
-<h1><% out.println("Auto Calendar"); %></h1>
+<div class="header">
+	<h1 class="title">Auto Calendar</h1>
+</div>
 <div id='calendar'></div>
 </body>
+<script src='js/main.js'></script>
+<script src='js/calendar.js'></script>
 <script>
-$(document).ready(function() {
-    // page is now ready, initialize the calendar...
-    $('#calendar').fullCalendar({
-    	customButtons: {
-            addEvent: {
-                text: 'Add Event',
-                click: function() {
-                    alert('Added event!');
-                }
-            },
-            addTask: {
-                text: 'Add Task',
-                click: function() {
-                    alert('Added task!');
-                }
-            }
-        },
-    	header:	{
-    		left:   'prev,next addEvent addTask title',
-            center: '',
-            right:  'today'
-    	}
-    	
-        // put your options and callbacks here
-    })
-});
+
 </script>
 </html>
