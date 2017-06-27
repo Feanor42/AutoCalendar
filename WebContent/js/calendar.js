@@ -16,10 +16,24 @@ $(document).ready(function() {
                 click: function() {
                     addTask();
                 }
+            },
+            callDatabase: {
+            	text: 'Call Database',
+            	click: function() {
+            	    var xhr = new XMLHttpRequest();
+            	    xhr.onreadystatechange = function() {
+            	        if (xhr.readyState == 4) {
+            	            var data = xhr.responseText;
+            	            alert(data);
+            	        }
+            	    }
+            	    xhr.open('GET', 'CallDatabase', true);
+            	    xhr.send(null);
+            	}
             }
         },
     	header:	{
-    		left:   'prev,next addEvent addTask title',
+    		left:   'prev,next addEvent addTask callDatabase title',
             center: '',
             right:  'today'
     	},

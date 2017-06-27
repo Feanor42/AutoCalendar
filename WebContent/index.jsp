@@ -9,53 +9,12 @@
 <script src='lib/jquery.js'></script>
 <script src='lib/moment.js'></script>
 <script src='lib/fullcalendar/fullcalendar.js'></script>
-<script src="js/CallDatabase.js"></script>
+
 </head>
 <body>
 <h1><% out.println("Auto Calendar"); %></h1>
 <div id='calendar'></div>
 </body>
-<script>
-$(document).ready(function() {
-    // page is now ready, initialize the calendar...
-    $('#calendar').fullCalendar({
-    	customButtons: {
-            addEvent: {
-                text: 'Add Event',
-                click: function() {
-                    alert('Added event!');
-                }
-            },
-            addTask: {
-                text: 'Add Task',
-                click: function() {
-                    alert('Added task!');
-                }
-            },
-            callDatabase: {
-            	text: 'Call Database',
-            	click: function() {
-            	    var xhr = new XMLHttpRequest();
-            	    xhr.onreadystatechange = function() {
-            	        if (xhr.readyState == 4) {
-            	            var data = xhr.responseText;
-            	            alert(data);
-            	        }
-            	    }
-            	    xhr.open('GET', 'CallDatabase', true);
-            	    xhr.send(null);
-            	}
-            }
-        },
-    	header:	{
-    		left:   'prev,next addEvent addTask callDatabase title',
-            center: '',
-            right:  'today'
-    	}
-    	
-        // put your options and callbacks here
-    })
-   
-});
-</script>
+
+<script src="js/calendar.js"></script>
 </html>
