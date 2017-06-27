@@ -9,12 +9,17 @@
 <script src='lib/jquery.js'></script>
 <script src='lib/moment.js'></script>
 <script src='lib/fullcalendar/fullcalendar.js'></script>
+<link rel='stylesheet' href='css/default.css' />
 
 </head>
 <body>
-<h1><% out.println("Auto Calendar"); %></h1>
+<div class="header">
+	<h1 class="title">Auto Calendar</h1>
+</div>
+
 <div id='calendar'></div>
 </body>
 
 <script src="js/calendar.js"></script>
+<script src="js/main.js"></script>
 </html>
