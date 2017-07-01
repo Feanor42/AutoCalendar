@@ -13,13 +13,31 @@
 
 </head>
 <body>
-<div class="header">
-	<h1 class="title">Auto Calendar</h1>
+<div id="header" class="header">
+	<h1 id="pageTitle" class="title">Auto Calendar</h1>
+	<h1 id="selectDayTitle" class="title">Select a Day</h1>
 </div>
 
 <div id='calendar'></div>
+
+<!-- Create Event Modal -->
+<div id="eventModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content animate-zoom">
+    <form id="eventForm" action="">			
+    	<input id="eventTitle" type="text" placeholder="Title" class="">
+    	<label for="eventDescription">Description</label>
+    	<textarea id="eventDescription" placeholder="Description"></textarea>
+    	<label for="eventStartDate">Date</label>
+    	<input id="eventStartDate" class="input-date" type="text">
+    	<button id="saveEventBtn">Save</button>
+    	<button id="cancelEventBtn">Cancel</button>
+    	<button id="deleteEventBtn">Delete</button>
+    </form>
+  </div>
+</div>
+
 </body>
 
-<script src="js/calendar.js"></script>
 <script src="js/main.js"></script>
 </html>

@@ -7,20 +7,182 @@ body {
 	font-family: Arial, Helvetica, sans-serif;
 	height: 100%;
 	width: 100%;
+	overflow-x: hidden;
 }
-
-.header {
-	background-color: #00a534;
+/* Style text inputs */
+input[type=text],textarea {
+	width: 100%;
+    padding: 10px 10px;
+    margin: 8px 0;
+    display: block;
+    border: 1px solid #ccc;
+    font-size: 1em;
+    clear: both;
 }
-
-.title {
+textarea {
+	resize: none;
+    overflow-y: scroll;
+    font-family: Arial, Helvetica, sans-serif;
+}
+label {
+	font-size: 1.1em;
+	float: left;
+}
+#eventTitle {
+	width: 75%;
+	font-size: 2em;
+	margin: 8px auto;
+	color: #000;
 	text-align: center;
-	padding: 25px 0;
-	color: #fff;
-	margin-top: 0;
-	font-size: 3em;
+}
+.input-date {
+	width: 50% !important;
+	text-align: center;
+	cursor: pointer;
 }
 
+/* Style Buttons */
+button {
+	padding: 10px;
+	font-size: 1em;
+}
+
+/* Header */
+.header {
+	height: 100px;
+	width: 100%;
+	margin-bottom: 1.75em; 
+}
+.title {
+	position: absolute;
+	text-align: center;
+	color: #fff;
+	margin: 0;
+	font-size: 3em;
+	line-height: 100px;
+	width: 100%;
+}
+#pageTitle {
+	background-color: #00a534;
+	left: 0;
+	transition: all .3s ease-out;
+}
+#selectDayTitle {
+	background-color: rgb(220, 9, 9);
+	left: -100%;
+	transition: all .3s ease-out;
+}
+.selectDayTitleMove {
+	left: 0 !important;
+}
+.pageTitleMove {
+	left: 100% !important;
+}
+
+/* Calendar */
 #calendar {
 	padding: 0 25px;
+}
+
+/* Select Day */
+#selectDayHeader {
+	position: absolute;
+	width: 100%;
+	display: none;
+	top: 0px;
+	text-align: center;
+	background-color: rgb(220, 9, 9);
+	z-index: 1;
+	vertical-align: middle;
+}
+
+/* Details box when hovering over event or task */
+.details {
+	position: absolute;
+    z-index: 10;
+    bottom: 180%;
+    left: 50%;
+    margin: 0 0 0 -60px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    width: 120px;
+}
+.details:after {
+	content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 10px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 10; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%; /* Could be more or less, depending on screen size */
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    text-align: center;
+}
+
+/* Zoom Animation */
+.animate-zoom {
+    -webkit-animation: animatezoom 0.6s;
+    animation: animatezoom 0.6s
+}
+@-webkit-keyframes animatezoom {
+    from {-webkit-transform: scale(0)} 
+    to {-webkit-transform: scale(1)}
+}
+@keyframes animatezoom {
+    from {transform: scale(0)} 
+    to {transform: scale(1)}
+}
+
+/* Fade Animation */
+.animate-fade {
+    -webkit-animation: animatefade 0.3s;
+    animation: animatefade 0.3s
+}
+@-webkit-keyframes animatefade {
+    from {opacity: 0} 
+    to {opacity: 1}
+}
+@keyframes animatefade {
+    from {opacity: 0} 
+    to {opacity: 1}
+}
+
+/* Slide Animation */
+.animate-fade {
+    -webkit-animation: animateslide 0.3s;
+    animation: animateslide 0.3s
+}
+@-webkit-keyframes animateslide {
+    from {left: -100%;} 
+    to {left: 0}
+}
+@keyframes animateslide {
+    from {left: -100%;} 
+    to {left: 0}
 }
