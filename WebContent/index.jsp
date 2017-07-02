@@ -25,14 +25,36 @@
   <!-- Modal content -->
   <div class="modal-content animate-zoom">
     <form id="eventForm" action="">			
-    	<input id="eventTitle" type="text" placeholder="Title" class="">
+    	<input id="eventTitle" type="text" placeholder="Title" required>
     	<label for="eventDescription">Description</label>
     	<textarea id="eventDescription" placeholder="Description"></textarea>
     	<label for="eventStartDate">Date</label>
-    	<input id="eventStartDate" class="input-date" type="text">
-    	<button id="saveEventBtn">Save</button>
-    	<button id="cancelEventBtn">Cancel</button>
-    	<button id="deleteEventBtn">Delete</button>
+    	<input id="eventStartDate" class="input-date" type="text" readonly required>
+    	<button id="saveEventBtn" type="submit">Save</button>
+    	<button id="cancelEventBtn" type="button">Cancel</button>
+    	<button id="deleteEventBtn" type="button">Delete</button>
+    </form>
+  </div>
+</div>
+
+<div id="taskModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content animate-zoom">
+    <form id="taskForm" action="">			
+    	<input id="taskTitle" type="text" placeholder="Title" required>
+    	<label for="taskDescription">Description</label>
+    	<textarea id="taskDescription" placeholder="Description"></textarea>
+    	<label for="taskAssignDate">Assign Date</label>
+    	<input id="taskAssignDate" class="input-date readonly" type="text" placeholder="Click to select day" required >
+    	<label for="taskDueDate">Due Date</label>
+    	<input id="taskDueDate" class="input-date readonly" type="text" placeholder="Click to select day" required>
+    	<label for="taskTimeToComplete">Est. Time to Complete (min)</label>
+    	<input id="taskTimeToComplete" type="number" name="quantity" min="15" max="1440" value="15" step="15" required>
+    	<label for="taskPriority">Priority</label>
+    	<input id="taskPriority" type="number" name="quantity" min="1" max="10" value="5">
+    	<button id="saveTaskBtn" type="submit">Save</button>
+    	<button id="cancelTaskBtn" type="button">Cancel</button>
+    	<button id="deleteTaskBtn" type="button">Delete</button>
     </form>
   </div>
 </div>
