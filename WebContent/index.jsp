@@ -29,11 +29,15 @@
     	<label for="eventDescription">Description</label>
     	<textarea id="eventDescription" placeholder="Description"></textarea>
     	<label for="eventStartDate">Date</label>
-    	<input id="eventStartDate" class="input-date" type="text" readonly required>
+    	<input id="eventStartDate" class="input-date readonly" type="text" readonly>
+    	<label for="eventStartTime">Start Time</label>
+    	<select id="eventStartTime" class="time-selection"></select>
+    	<label for="eventEndTime">End Time</label>
+    	<select id="eventEndTime" class="time-selection"></select>
     	<button id="saveEventBtn" type="submit">Save</button>
     	<button id="cancelEventBtn" type="button">Cancel</button>
     	<button id="deleteEventBtn" type="button">Delete</button>
-    </form>
+	</form>
   </div>
 </div>
 
@@ -45,9 +49,9 @@
     	<label for="taskDescription">Description</label>
     	<textarea id="taskDescription" placeholder="Description"></textarea>
     	<label for="taskAssignDate">Assign Date</label>
-    	<input id="taskAssignDate" class="input-date readonly" type="text" placeholder="Click to select day" required >
+    	<input id="taskAssignDate" class="input-date readonly" type="text" placeholder="Click to select day" readonly >
     	<label for="taskDueDate">Due Date</label>
-    	<input id="taskDueDate" class="input-date readonly" type="text" placeholder="Click to select day" required>
+    	<input id="taskDueDate" class="input-date readonly" type="text" placeholder="Click to select day" readonly>
     	<label for="taskTimeToComplete">Est. Time to Complete (min)</label>
     	<input id="taskTimeToComplete" type="number" name="quantity" min="15" max="1440" value="15" step="15" required>
     	<label for="taskPriority">Priority</label>

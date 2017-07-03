@@ -7,6 +7,27 @@ var MODALS = document.getElementsByClassName("modal");
 var EVENTS = [];
 var TASKS = [];
 var ID = 0; // Temporary ID
+var HOURS = [12,1,2,3,4,5,6,7,8,9,10,11];
+generateHours('am');
+generateHours('pm');
+function generateHours(ampm){
+	for(var i = 0; i < HOURS.length; i++){
+		var off = 0;
+		if(HOURS[i] === 12 && ampm === 'am')
+			off = -12;
+		else if(HOURS[i] < 12 && ampm === 'pm')
+			off = 12;
+		var $option = $("<option>");
+		$option.val((HOURS[i]+off) + ':' + '00');
+		$option.html(HOURS[i] + ':' + '00' + ampm);
+		$('.time-selection').append($option);
+		$option = $("<option>");
+		$option.val((HOURS[i]+off) + ':' + '30');
+		$option.html(HOURS[i] + ':' + '30' + ampm);
+		$('.time-selection').append($option);
+	}
+}
+
 
 // <Samuel Livingston> 30-Jun-2017
 // Options for fullcalendar
@@ -83,7 +104,7 @@ $(document).ready(function() {
 
 // <Samuel Livingston> 30-Jun-2017
 // Event object. Based on fullcalendar's event object but with extra fields.
-function Event( args ){
+function Event(args){
 	this.id = args.id;
 	this.title = args.title;
 	this.allDay = false;
@@ -159,8 +180,8 @@ function addEvent(){
 		var args = {
 				id: ID,
 				title: $("#eventTitle").val(),
-				start: $("#eventStartDate").val(), // need to add time to this
-				end: $("#eventStartDate").val(), // need to add time to this
+				start: $("#eventStartDate").val() + ' ' + $("#eventStartTime").val(), 
+				end: $("#eventStartDate").val() + ' ' + $("#eventEndTime").val(), 
 				eventType: 0,
 				description: $("#eventDescription").val()
 		}
@@ -271,6 +292,8 @@ function editEvent(calEvent){
 	$("#eventTitle").val(calEvent.title);
 	$("#eventDescription").val(calEvent.description);
 	$("#eventStartDate").val(calEvent.start.format('MM/DD/YYYY'));
+	$("#eventStartTime").val(calEvent.start.format('HH:mm'));
+	$("#eventEndTime").val(calEvent.end.format('HH:mm'));
 	
 	// <Samuel Livingston> 30-Jun-2017
 	// Event form submit callback. Prevent the event form from submitting. 
@@ -283,8 +306,8 @@ function editEvent(calEvent){
 		$("#eventModal").css("display", "none");
 		calEvent.title = $("#eventTitle").val();
 		calEvent.description = $("#eventDescription").val();
-		calEvent.start = $("#eventStartDate").val();
-		calEvent.end = $("#eventStartDate").val();
+		calEvent.start = $("#eventStartDate").val() + ' ' + $("#eventStartTime").val();
+		calEvent.end = $("#eventStartDate").val() + ' ' + $("#eventEndTime").val();
 		$('#calendar').fullCalendar( 'updateEvent', calEvent );
 	});
 	
