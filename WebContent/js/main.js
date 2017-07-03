@@ -17,17 +17,18 @@ function generateHours(ampm){
 			off = -12;
 		else if(HOURS[i] < 12 && ampm === 'pm')
 			off = 12;
-		var $option = $("<option>");
-		$option.val((HOURS[i]+off) + ':' + '00');
-		$option.html(HOURS[i] + ':' + '00' + ampm);
-		$('.time-selection').append($option);
-		$option = $("<option>");
-		$option.val((HOURS[i]+off) + ':' + '30');
-		$option.html(HOURS[i] + ':' + '30' + ampm);
-		$('.time-selection').append($option);
+		for(var min = 0; min < 60; min += 15){
+			var $option = $("<option>");
+			$option.val(addZero(HOURS[i]+off) + ':' + addZero(min).toString());
+			$option.html(addZero(HOURS[i]) + ':' + addZero(min).toString() + ampm);
+			$('.time-selection').append($option);
+		}
 	}
 }
 
+function addZero(num){
+	return num > 9 ? "" + num: "0" + num;
+}
 
 // <Samuel Livingston> 30-Jun-2017
 // Options for fullcalendar
@@ -113,6 +114,7 @@ function Event(args){
 	this.eventType = args.eventType;	
 	this.description = args.description;
 	this.type = 'Event';
+	this.color = '#4289f4';
 }
 
 // <Samuel Livingston> 30-Jun-2017
@@ -127,7 +129,7 @@ function Task(args){
 	this.priority = args.priority;
 	this.timeToComplete = args.timeToComplete;
 	this.type = 'Task';
-	this.color = '#FFA500';
+	this.color = '#ff9635';
 }
 
 // <Samuel Livingston> 30-Jun-2017
@@ -166,6 +168,7 @@ function addEvent(){
 		normalCalendar();
 		$("#eventModal").css("display", "block");
 		$("#eventStartDate").val(start.format('MM/DD/YYYY'));
+		$("#eventStartDate").change();
 	});
 	
 	// <Samuel Livingston> 30-Jun-2017
@@ -175,6 +178,8 @@ function addEvent(){
 		event.preventDefault();
 		
 		// Here we will validate the data
+		if(!validateEventData())
+			return false;
 		
 		$("#eventModal").css("display", "none");
 		var args = {
@@ -213,6 +218,7 @@ function addTask(){
 			normalCalendar();
 			$("#taskModal").css("display", "block");
 			$("#taskAssignDate").val(start.format('MM/DD/YYYY'));
+			$("#taskAssignDate").change();
 		});
 	});
 	
@@ -226,6 +232,7 @@ function addTask(){
 			normalCalendar();
 			$("#taskModal").css("display", "block");
 			$("#taskDueDate").val(start.format('MM/DD/YYYY'));
+			$("#taskDueDate").change();
 		});
 	});
 
@@ -236,17 +243,19 @@ function addTask(){
 		event.preventDefault();
 		
 		// Here we will validate the data
+		if(!validateTaskData())
+			return false;
 		
 		$("#taskModal").css("display", "none");
 		var args = {
 				id: ID,
 				title: $("#taskTitle").val(),
-				start: $("#taskAssignDate").val(),
-				end: $("#taskDueDate").val(),
+				start: $("#taskAssignDate").val() + ' ' + $("#taskAssignTime").val(),
+				end: $("#taskDueDate").val() + ' ' +  $("#taskDueTime").val(),
 				eventType: 0,
 				description: $("#taskDescription").val(),
-				assignDate: $("#taskAssignDate").val(),
-				dueDate: $("#taskDueDate").val(),
+				assignDate: moment($("#taskAssignDate").val() + ' ' +  $("#taskAssignTime").val()),
+				dueDate: moment($("#taskDueDate").val() + ' ' +  $("#taskDueTime").val()),
 				priority: $("#taskPriority").val(),
 				timeToComplete: $("#taskTimeToComplete").val()
 		}
@@ -292,8 +301,8 @@ function editEvent(calEvent){
 	$("#eventTitle").val(calEvent.title);
 	$("#eventDescription").val(calEvent.description);
 	$("#eventStartDate").val(calEvent.start.format('MM/DD/YYYY'));
-	$("#eventStartTime").val(calEvent.start.format('HH:mm'));
-	$("#eventEndTime").val(calEvent.end.format('HH:mm'));
+	$("#eventStartTime").val(calEvent.start.format('HH:mm')).change();
+	$("#eventEndTime").val(calEvent.end.format('HH:mm')).change();
 	
 	// <Samuel Livingston> 30-Jun-2017
 	// Event form submit callback. Prevent the event form from submitting. 
@@ -302,6 +311,8 @@ function editEvent(calEvent){
 		event.preventDefault();
 		
 		// Here we will validate the data
+		if(!validateEventData())
+			return false;
 		
 		$("#eventModal").css("display", "none");
 		calEvent.title = $("#eventTitle").val();
@@ -316,6 +327,7 @@ function editEvent(calEvent){
 		normalCalendar();
 		$("#eventModal").css("display", "block");
 		$("#eventStartDate").val(start.format('MM/DD/YYYY'));
+		$("#eventStartDate").change();
 	});
 	
 	// Cancel button callback
@@ -329,8 +341,10 @@ function editTask(calTask){
 	$("#taskModal").css("display", "block");
 	$("#taskTitle").val(calTask.title);
 	$("#taskDescription").val(calTask.description);
-	$("#taskAssignDate").val(calTask.assignDate);
-	$("#taskDueDate").val(calTask.dueDate);
+	$("#taskAssignDate").val(calTask.assignDate.format('MM/DD/YYYY'));
+	$("#taskDueDate").val(calTask.dueDate.format('MM/DD/YYYY'));
+	$("#taskAssignTime").val(calTask.assignDate.format('HH:mm'));
+	$("#taskDueTime").val(calTask.dueDate.format('HH:mm'));
 	$("#taskPriority").val(calTask.priority);
 	$("#taskTimeToComplete").val(calTask.timeToComplete);
 	
@@ -341,12 +355,16 @@ function editTask(calTask){
 		event.preventDefault();
 		
 		// Here we will validate the data
+		if(!validateTaskData())
+			return false;
 		
 		$("#taskModal").css("display", "none");
 		calTask.title = $("#taskTitle").val();
 		calTask.description = $("#taskDescription").val();
-		calTask.assignDate = $("#taskAssignDate").val();
-		calTask.dueDate = $("#taskDueDate").val();
+		calTask.start = $("#taskAssignDate").val() + ' ' + $("#taskAssignTime").val();
+		calTask.end = $("#taskDueDate").val() + ' ' +  $("#taskDueTime").val();
+		calTask.assignDate = moment($("#taskAssignDate").val() + ' ' + $("#taskAssignTime").val());
+		calTask.dueDate = moment($("#taskDueDate").val() + ' ' + $("#taskDueTime").val());
 		calTask.priority = $("#taskPriority").val();
 		calTask.timeToComplete = $("#taskTimeToComplete").val();
 		
@@ -357,4 +375,123 @@ function editTask(calTask){
 	$('#cancelTaskBtn').off().click(function(event){
 		$("#taskModal").css("display", "none");
 	});
+}
+
+//Validate input as user inputs data
+$('#eventForm').find("input,select,textarea").on('change input',function(e){
+	validateEventData();
+});
+function validateEventData(){
+	var isValid = true;
+	
+	// Validate that end time is greater than start time
+	var startTime = $("#eventStartTime").val();
+	var endTime = $("#eventEndTime").val();
+	if(timeToDec(endTime) <= timeToDec(startTime)){
+		$("#eventEndTime").siblings('.error-message').html('End time is not greater than start time');
+		isValid = false;
+	}
+	else{
+		$("#eventEndTime").siblings('.error-message').html('');
+	}
+		
+	// Validate that the date is a date
+	var isDate = moment($("#eventStartDate").val()).isValid();
+	if(!isDate){
+		$("#eventStartDate").siblings('.error-message').html('Please pick a date');
+		isValid = false;
+	}
+	else{
+		$("#eventStartDate").siblings('.error-message').html('');
+	}
+	
+	// Validate that the title is not empty
+	if($("#eventTitle").val() === ""){
+		$("#eventTitle").siblings('.error-message').html('Title is empty');
+		isValid = false;
+	}
+	else{
+		$("#eventTitle").siblings('.error-message').html('');
+	}
+	
+	return isValid;
+}
+
+// Validate input as user inputs data
+$('#taskForm').find("input,select,textarea").on('change input', function(){
+	validateTaskData();
+});
+
+function validateTaskData(){
+	var isValid = true;
+		
+	// Validate that the assign date is a date
+	var isDate = moment($("#taskAssignDate").val()).isValid();
+	if(!isDate){
+		$("#taskAssignDate").siblings('.error-message').html('Please pick a date');
+		isValid = false;
+	}
+	else{
+		$("#taskAssignDate").siblings('.error-message').html('');
+	}
+	
+	// Validate that the due date is a date
+	var isDate = moment($("#taskDueDate").val()).isValid();
+	if(!isDate){
+		$("#taskDueDate").siblings('.error-message').html('Please pick a date');
+		isValid = false;
+	}
+	else{
+		$("#taskDueDate").siblings('.error-message').html('');
+	}
+	
+	// Validate that the due date is after or the same day as the assign date
+	if(isValid){
+		if(moment($("#taskDueDate").val()).isAfter(moment($("#taskAssignDate").val())) ||
+				moment($("#taskDueDate").val()).isSame(moment($("#taskAssignDate").val()))){
+			$("#taskDueDate").siblings('.error-message').html('');
+		}
+		else{
+			$("#taskDueDate").siblings('.error-message').html('Due date is before assign date');
+			isValid = false;
+		}
+	}
+	
+	// Validate that the due time is greater than the assign time
+	// if the due date and assign date are the same day
+	if(isValid){
+		// If the days are the same
+		if(moment($("#taskDueDate").val()).isSame(moment($("#taskAssignDate").val()))){
+			
+			var assignTime = $("#taskAssignTime").val();
+			var dueTime = $("#taskDueTime").val();
+			
+			// If assign time is greater than or equal to the due time
+			if(timeToDec(dueTime) <= timeToDec(assignTime)){
+				$("#taskDueTime").siblings('.error-message').html('Due time must be greater than assign time');
+				isValid = false;
+			}
+			else{
+				$("#taskDueTime").siblings('.error-message').html('');
+			}
+		}
+	}
+	
+	// Validate that the title is not empty
+	if($("#taskTitle").val() === ""){
+		$("#taskTitle").siblings('.error-message').html('Title is empty');
+		isValid = false;
+	}
+	else{
+		$("#taskTitle").siblings('.error-message').html('');
+	}
+	
+	return isValid;
+}
+
+function timeToDec(time){
+	var hoursMin = time.split(':');
+	var hours = Number(hoursMin[0]);
+	var mins = Number(hoursMin[1])/60;
+	return hours + mins;
 }

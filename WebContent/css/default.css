@@ -17,10 +17,8 @@ input[type=text],textarea{
     display: block;
     border: 1px solid #ccc;
     font-size: 1em;
-    clear: both;
 }
 input[type=number] {
-	width: 25%;
 	padding: 10px;
 	margin: 8px 0;
 	display: block;
@@ -29,7 +27,6 @@ input[type=number] {
 	clear: both;
 }
 .time-selection {
-	width: 50% !important;
 	padding: 10px;
 	margin: 8px 0;
 	display: block;
@@ -46,17 +43,25 @@ label {
 	font-size: 1.1em;
 	float: left;
 }
+.error-message {
+    margin: 0;
+    color: #d61616;
+    text-align: left;
+    clear: both;
+}
 #eventTitle, #taskTitle {
-	width: 75%;
 	font-size: 2em;
 	margin: 8px auto;
 	color: #000;
 	text-align: center;
 }
 .input-date {
-	width: 50% !important;
 	text-align: center;
 	cursor: pointer;
+}
+.unit {
+	align-self: center;
+	text-align: left;
 }
 
 /* Style Buttons */
