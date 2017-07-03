@@ -7,24 +7,31 @@ var MODALS = document.getElementsByClassName("modal");
 var EVENTS = [];
 var TASKS = [];
 var ID = 0; // Temporary ID
-var HOURS = [12,1,2,3,4,5,6,7,8,9,10,11];
-generateHours('am');
-generateHours('pm');
-function generateHours(ampm){
-	for(var i = 0; i < HOURS.length; i++){
-		var off = 0;
-		if(HOURS[i] === 12 && ampm === 'am')
-			off = -12;
-		else if(HOURS[i] < 12 && ampm === 'pm')
-			off = 12;
-		for(var min = 0; min < 60; min += 15){
-			var $option = $("<option>");
-			$option.val(addZero(HOURS[i]+off) + ':' + addZero(min).toString());
-			$option.html(addZero(HOURS[i]) + ':' + addZero(min).toString() + ampm);
-			$('.time-selection').append($option);
+
+// <Samuel Livingston> 03-Jul-2017
+// This function only needs to run once. It generates the
+// select lists for the times.
+(function(){
+	var hours = [12,1,2,3,4,5,6,7,8,9,10,11];
+	function generateHours(ampm){
+		for(var i = 0; i < hours.length; i++){
+			var off = 0;
+			if(hours[i] === 12 && ampm === 'am')
+				off = -12;
+			else if(hours[i] < 12 && ampm === 'pm')
+				off = 12;
+			for(var min = 0; min < 60; min += 15){
+				var $option = $("<option>");
+				$option.val(addZero(hours[i]+off) + ':' + addZero(min).toString());
+				$option.html(addZero(hours[i]) + ':' + addZero(min).toString() + ampm);
+				$('.time-selection').append($option);
+			}
 		}
 	}
-}
+	generateHours('am');
+	generateHours('pm');
+})();
+
 
 function addZero(num){
 	return num > 9 ? "" + num: "0" + num;
@@ -185,8 +192,8 @@ function addEvent(){
 		var args = {
 				id: ID,
 				title: $("#eventTitle").val(),
-				start: $("#eventStartDate").val() + ' ' + $("#eventStartTime").val(), 
-				end: $("#eventStartDate").val() + ' ' + $("#eventEndTime").val(), 
+				start: moment($("#eventStartDate").val() + ' ' + $("#eventStartTime").val(), "MM/DD/YYYY HH:mm"), 
+				end: moment($("#eventStartDate").val() + ' ' + $("#eventEndTime").val(), "MM/DD/YYYY HH:mm"), 
 				eventType: 0,
 				description: $("#eventDescription").val()
 		}
@@ -198,6 +205,11 @@ function addEvent(){
 	
 	// Cancel button callback
 	$('#cancelEventBtn').off().click(function(event){
+		$("#eventModal").css("display", "none");
+	});
+	
+	// Delete button callback
+	$('#deleteEventBtn').off().click(function(event){
 		$("#eventModal").css("display", "none");
 	});
 }
@@ -250,12 +262,12 @@ function addTask(){
 		var args = {
 				id: ID,
 				title: $("#taskTitle").val(),
-				start: $("#taskAssignDate").val() + ' ' + $("#taskAssignTime").val(),
-				end: $("#taskDueDate").val() + ' ' +  $("#taskDueTime").val(),
+				start: moment($("#taskAssignDate").val() + ' ' + $("#taskAssignTime").val(), "MM/DD/YYYY HH:mm"),
+				end: moment($("#taskDueDate").val() + ' ' +  $("#taskDueTime").val(), "MM/DD/YYYY HH:mm"),
 				eventType: 0,
 				description: $("#taskDescription").val(),
-				assignDate: moment($("#taskAssignDate").val() + ' ' +  $("#taskAssignTime").val()),
-				dueDate: moment($("#taskDueDate").val() + ' ' +  $("#taskDueTime").val()),
+				assignDate: moment($("#taskAssignDate").val() + ' ' +  $("#taskAssignTime").val(), "MM/DD/YYYY HH:mm"),
+				dueDate: moment($("#taskDueDate").val() + ' ' +  $("#taskDueTime").val(), "MM/DD/YYYY HH:mm"),
 				priority: $("#taskPriority").val(),
 				timeToComplete: $("#taskTimeToComplete").val()
 		}
@@ -267,6 +279,11 @@ function addTask(){
 	
 	// Cancel button callback
 	$('#cancelTaskBtn').off().click(function(event){
+		$("#taskModal").css("display", "none");
+	});
+	
+	// Delete button callback
+	$('#deleteTaskBtn').off().click(function(event){
 		$("#taskModal").css("display", "none");
 	});
 }
@@ -317,8 +334,8 @@ function editEvent(calEvent){
 		$("#eventModal").css("display", "none");
 		calEvent.title = $("#eventTitle").val();
 		calEvent.description = $("#eventDescription").val();
-		calEvent.start = $("#eventStartDate").val() + ' ' + $("#eventStartTime").val();
-		calEvent.end = $("#eventStartDate").val() + ' ' + $("#eventEndTime").val();
+		calEvent.start = moment($("#eventStartDate").val() + ' ' + $("#eventStartTime").val(), "MM/DD/YYYY HH:mm");
+		calEvent.end = moment($("#eventStartDate").val() + ' ' + $("#eventEndTime").val(), "MM/DD/YYYY HH:mm");
 		$('#calendar').fullCalendar( 'updateEvent', calEvent );
 	});
 	
@@ -333,6 +350,12 @@ function editEvent(calEvent){
 	// Cancel button callback
 	$('#cancelEventBtn').off().click(function(event){
 		$("#eventModal").css("display", "none");
+	});
+	
+	// Delete button callback
+	$('#deleteEventBtn').off().click(function(event){
+		$("#eventModal").css("display", "none");
+		$('#calendar').fullCalendar( 'removeEvents', calEvent.id );
 	});
 	
 }
@@ -361,10 +384,10 @@ function editTask(calTask){
 		$("#taskModal").css("display", "none");
 		calTask.title = $("#taskTitle").val();
 		calTask.description = $("#taskDescription").val();
-		calTask.start = $("#taskAssignDate").val() + ' ' + $("#taskAssignTime").val();
-		calTask.end = $("#taskDueDate").val() + ' ' +  $("#taskDueTime").val();
-		calTask.assignDate = moment($("#taskAssignDate").val() + ' ' + $("#taskAssignTime").val());
-		calTask.dueDate = moment($("#taskDueDate").val() + ' ' + $("#taskDueTime").val());
+		calTask.start = moment($("#taskAssignDate").val() + ' ' + $("#taskAssignTime").val(), "MM/DD/YYYY HH:mm");
+		calTask.end = moment($("#taskDueDate").val() + ' ' +  $("#taskDueTime").val(), "MM/DD/YYYY HH:mm");
+		calTask.assignDate = moment($("#taskAssignDate").val() + ' ' + $("#taskAssignTime").val(), "MM/DD/YYYY HH:mm");
+		calTask.dueDate = moment($("#taskDueDate").val() + ' ' + $("#taskDueTime").val(), "MM/DD/YYYY HH:mm");
 		calTask.priority = $("#taskPriority").val();
 		calTask.timeToComplete = $("#taskTimeToComplete").val();
 		
@@ -374,6 +397,12 @@ function editTask(calTask){
 	// Cancel button callback
 	$('#cancelTaskBtn').off().click(function(event){
 		$("#taskModal").css("display", "none");
+	});
+	
+	// Delete button callback
+	$('#deleteTaskBtn').off().click(function(event){
+		$("#taskModal").css("display", "none");
+		$('#calendar').fullCalendar( 'removeEvents', calTask.id );
 	});
 }
 
@@ -396,7 +425,7 @@ function validateEventData(){
 	}
 		
 	// Validate that the date is a date
-	var isDate = moment($("#eventStartDate").val()).isValid();
+	var isDate = moment($("#eventStartDate").val(), "MM/DD/YYYY").isValid();
 	if(!isDate){
 		$("#eventStartDate").siblings('.error-message').html('Please pick a date');
 		isValid = false;
@@ -421,12 +450,11 @@ function validateEventData(){
 $('#taskForm').find("input,select,textarea").on('change input', function(){
 	validateTaskData();
 });
-
 function validateTaskData(){
 	var isValid = true;
 		
 	// Validate that the assign date is a date
-	var isDate = moment($("#taskAssignDate").val()).isValid();
+	var isDate = moment($("#taskAssignDate").val(), "MM/DD/YYYY").isValid();
 	if(!isDate){
 		$("#taskAssignDate").siblings('.error-message').html('Please pick a date');
 		isValid = false;
@@ -436,7 +464,7 @@ function validateTaskData(){
 	}
 	
 	// Validate that the due date is a date
-	var isDate = moment($("#taskDueDate").val()).isValid();
+	var isDate = moment($("#taskDueDate").val(), "MM/DD/YYYY").isValid();
 	if(!isDate){
 		$("#taskDueDate").siblings('.error-message').html('Please pick a date');
 		isValid = false;
@@ -447,8 +475,8 @@ function validateTaskData(){
 	
 	// Validate that the due date is after or the same day as the assign date
 	if(isValid){
-		if(moment($("#taskDueDate").val()).isAfter(moment($("#taskAssignDate").val())) ||
-				moment($("#taskDueDate").val()).isSame(moment($("#taskAssignDate").val()))){
+		if(moment($("#taskDueDate").val(), "MM/DD/YYYY").isAfter(moment($("#taskAssignDate").val(), "MM/DD/YYYY")) ||
+				moment($("#taskDueDate").val(), "MM/DD/YYYY").isSame(moment($("#taskAssignDate").val(), "MM/DD/YYYY"))){
 			$("#taskDueDate").siblings('.error-message').html('');
 		}
 		else{
@@ -461,7 +489,7 @@ function validateTaskData(){
 	// if the due date and assign date are the same day
 	if(isValid){
 		// If the days are the same
-		if(moment($("#taskDueDate").val()).isSame(moment($("#taskAssignDate").val()))){
+		if(moment($("#taskDueDate").val(), "MM/DD/YYYY").isSame(moment($("#taskAssignDate").val(), "MM/DD/YYYY"))){
 			
 			var assignTime = $("#taskAssignTime").val();
 			var dueTime = $("#taskDueTime").val();
