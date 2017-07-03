@@ -108,9 +108,9 @@
     		<p class="error-message"></p>
     	</div>
     	<div class="btn-group span-12">
-	    	<button id="saveTaskBtn" type="submit">Save</button>
-	    	<button id="cancelTaskBtn" type="button">Cancel</button>
-	    	<button id="deleteTaskBtn" type="button">Delete</button>
+	    	<button id="saveTaskBtn" type="submit" class="btn-default">Save</button>
+	    	<button id="cancelTaskBtn" type="button" class="btn-default">Cancel</button>
+	    	<button id="deleteTaskBtn" type="button" class="btn-default">Delete</button>
     	</div>
     </form>
   </div>
