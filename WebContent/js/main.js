@@ -7,31 +7,24 @@ var MODALS = document.getElementsByClassName("modal");
 var EVENTS = [];
 var TASKS = [];
 var ID = 0; // Temporary ID
-
-// <Samuel Livingston> 03-Jul-2017
-// This function only needs to run once. It generates the
-// select lists for the times.
-(function(){
-	var hours = [12,1,2,3,4,5,6,7,8,9,10,11];
-	function generateHours(ampm){
-		for(var i = 0; i < hours.length; i++){
-			var off = 0;
-			if(hours[i] === 12 && ampm === 'am')
-				off = -12;
-			else if(hours[i] < 12 && ampm === 'pm')
-				off = 12;
-			for(var min = 0; min < 60; min += 15){
-				var $option = $("<option>");
-				$option.val(addZero(hours[i]+off) + ':' + addZero(min).toString());
-				$option.html(addZero(hours[i]) + ':' + addZero(min).toString() + ampm);
-				$('.time-selection').append($option);
-			}
+var HOURS = [12,1,2,3,4,5,6,7,8,9,10,11];
+generateHours('am');
+generateHours('pm');
+function generateHours(ampm){
+	for(var i = 0; i < HOURS.length; i++){
+		var off = 0;
+		if(HOURS[i] === 12 && ampm === 'am')
+			off = -12;
+		else if(HOURS[i] < 12 && ampm === 'pm')
+			off = 12;
+		for(var min = 0; min < 60; min += 15){
+			var $option = $("<option>");
+			$option.val(addZero(HOURS[i]+off) + ':' + addZero(min).toString());
+			$option.html(addZero(HOURS[i]) + ':' + addZero(min).toString() + ampm);
+			$('.time-selection').append($option);
 		}
 	}
-	generateHours('am');
-	generateHours('pm');
-})();
-
+}
 
 function addZero(num){
 	return num > 9 ? "" + num: "0" + num;
@@ -52,11 +45,25 @@ var initialCalendarOptions = {
                 click: function() {
                     addTask();
                 }
+            },
+            callDatabase: {
+            	text: 'Call Database',
+            	click: function() {
+            	    var xhr = new XMLHttpRequest();
+            	    xhr.onreadystatechange = function() {
+            	        if (xhr.readyState == 4) {
+            	            var data = xhr.responseText;
+            	            alert(data);
+            	        }
+            	    }
+            	    xhr.open('GET', 'AddEvent', true);
+            	    xhr.send(null);
+            	}
             }
         },
     	header:	{
-    		left:   'prev,next addEvent addTask',
-            center: 'title',
+    		left:   'prev,next addEvent addTask callDatabase title ',
+            center: '',
             right:  'today month agendaWeek agendaDay'
     	},    	
     	eventClick: function(calElement, jsEvent, view) {
@@ -153,7 +160,6 @@ function normalCalendar(){
 // <Samuel Livingston> 02-Jul-2017
 // Adds an event to the calendar
 function addEvent(){
-	$(".error-message").html(""); // reset error messages
 	selectDayCalendar(); // First select a day for the event
 	document.getElementById("eventForm").reset();
 	
@@ -176,32 +182,14 @@ function addEvent(){
 			return false;
 		
 		$("#eventModal").css("display", "none");
-		
-		// Make object with all the parameters for the event
 		var args = {
 				id: ID,
 				title: $("#eventTitle").val(),
-				start: moment($("#eventStartDate").val() + ' ' + $("#eventStartTime").val(), "MM/DD/YYYY HH:mm"), 
-				end: moment($("#eventStartDate").val() + ' ' + $("#eventEndTime").val(), "MM/DD/YYYY HH:mm"), 
+				start: $("#eventStartDate").val() + ' ' + $("#eventStartTime").val(), 
+				end: $("#eventStartDate").val() + ' ' + $("#eventEndTime").val(), 
 				eventType: 0,
 				description: $("#eventDescription").val()
 		}
-		
-		// Send new event data to server
-		var data = JSON.stringify(args);
-		var xhr = new XMLHttpRequest();
-		var url = "AddEvent";
-		xhr.open("POST", url, true);
-		xhr.setRequestHeader("Content-Type", "application/json");
-		xhr.onreadystatechange = function() {
-		    if(xhr.readyState == 4 && xhr.status == 200) {
-		        respondAddEvent(xhr.responseText);
-		    }
-		}
-		xhr.send(data);
-		
-		// This will go away once the server is responding
-		// to the AJAX call
 		newEvent = new Event( args );
 		$('#calendar').fullCalendar( 'renderEvent', newEvent, true);
 		EVENTS.push(newEvent);
@@ -212,24 +200,11 @@ function addEvent(){
 	$('#cancelEventBtn').off().click(function(event){
 		$("#eventModal").css("display", "none");
 	});
-	
-	// Delete button callback
-	$('#deleteEventBtn').off().click(function(event){
-		$("#eventModal").css("display", "none");
-	});
-}
-
-// <Samuel Livingston> 06-Jul-2017
-// Called after the server has added the event to
-// the database.
-function respondAddEvent(){
-	
 }
 
 // <Samuel Livingston> 02-Jul-2017
 // Adds a task to the calendar
 function addTask(){
-	$(".error-message").html(""); // reset error messages
 	$("#taskModal").css("display", "block");
 	document.getElementById("taskForm").reset();
 	
@@ -275,31 +250,15 @@ function addTask(){
 		var args = {
 				id: ID,
 				title: $("#taskTitle").val(),
-				start: moment($("#taskAssignDate").val() + ' ' + $("#taskAssignTime").val(), "MM/DD/YYYY HH:mm"),
-				end: moment($("#taskDueDate").val() + ' ' +  $("#taskDueTime").val(), "MM/DD/YYYY HH:mm"),
+				start: $("#taskAssignDate").val() + ' ' + $("#taskAssignTime").val(),
+				end: $("#taskDueDate").val() + ' ' +  $("#taskDueTime").val(),
 				eventType: 0,
 				description: $("#taskDescription").val(),
-				assignDate: moment($("#taskAssignDate").val() + ' ' +  $("#taskAssignTime").val(), "MM/DD/YYYY HH:mm"),
-				dueDate: moment($("#taskDueDate").val() + ' ' +  $("#taskDueTime").val(), "MM/DD/YYYY HH:mm"),
+				assignDate: moment($("#taskAssignDate").val() + ' ' +  $("#taskAssignTime").val()),
+				dueDate: moment($("#taskDueDate").val() + ' ' +  $("#taskDueTime").val()),
 				priority: $("#taskPriority").val(),
 				timeToComplete: $("#taskTimeToComplete").val()
 		}
-		
-		// Send new task data to server
-		var data = JSON.stringify(args);
-		var xhr = new XMLHttpRequest();
-		var url = "AddTask";
-		xhr.open("POST", url, true);
-		xhr.setRequestHeader("Content-Type", "application/json");
-		xhr.onreadystatechange = function() {
-		    if(xhr.readyState == 4 && xhr.status == 200) {
-		        respondAddTask(xhr.responseText);
-		    }
-		}
-		xhr.send(data);
-		
-		// This will go away once the server is responding
-		// to the AJAX call
 		newTask = new Task( args );
 		$('#calendar').fullCalendar( 'renderEvent', newTask, true);
 		TASKS.push(newTask);
@@ -310,19 +269,11 @@ function addTask(){
 	$('#cancelTaskBtn').off().click(function(event){
 		$("#taskModal").css("display", "none");
 	});
-	
-	// Delete button callback
-	$('#deleteTaskBtn').off().click(function(event){
-		$("#taskModal").css("display", "none");
-	});
 }
 
-//<Samuel Livingston> 06-Jul-2017
-//Called after the server has added the task to
-//the database.
-function respondAddTask(){
-	
-}
+$(".readonly").on('keydown paste', function(e){
+    e.preventDefault();
+});
 
 // <Samuel Livingston> 30-Jun-2017
 // Callback for date input in event dialog. Closes the event
@@ -346,7 +297,6 @@ function viewElement(calElement){
 }
 
 function editEvent(calEvent){
-	$(".error-message").html(""); // reset error messages
 	$("#eventModal").css("display", "block");
 	$("#eventTitle").val(calEvent.title);
 	$("#eventDescription").val(calEvent.description);
@@ -367,32 +317,8 @@ function editEvent(calEvent){
 		$("#eventModal").css("display", "none");
 		calEvent.title = $("#eventTitle").val();
 		calEvent.description = $("#eventDescription").val();
-		calEvent.start = moment($("#eventStartDate").val() + ' ' + $("#eventStartTime").val(), "MM/DD/YYYY HH:mm");
-		calEvent.end = moment($("#eventStartDate").val() + ' ' + $("#eventEndTime").val(), "MM/DD/YYYY HH:mm");
-		
-		// Create event data from calEvent
-		var event = {
-				title: calEvent.title,
-				description: calEvent.description,
-				start: calEvent.start,
-				end: calEvent.end
-		};
-		
-		// Send updated event data to server
-		var data = JSON.stringify(calEvent);
-		var xhr = new XMLHttpRequest();
-		var url = "EditEvent";
-		xhr.open("POST", url, true);
-		xhr.setRequestHeader("Content-Type", "application/json");
-		xhr.onreadystatechange = function() {
-		    if(xhr.readyState == 4 && xhr.status == 200) {
-		        respondEditEvent(xhr.responseText);
-		    }
-		}
-		xhr.send(data);
-		
-		// This will go away once the server is responding
-		// to the AJAX call
+		calEvent.start = $("#eventStartDate").val() + ' ' + $("#eventStartTime").val();
+		calEvent.end = $("#eventStartDate").val() + ' ' + $("#eventEndTime").val();
 		$('#calendar').fullCalendar( 'updateEvent', calEvent );
 	});
 	
@@ -409,23 +335,9 @@ function editEvent(calEvent){
 		$("#eventModal").css("display", "none");
 	});
 	
-	// Delete button callback
-	$('#deleteEventBtn').off().click(function(event){
-		$("#eventModal").css("display", "none");
-		$('#calendar').fullCalendar( 'removeEvents', calEvent.id );
-	});
-	
-}
-
-// <Samuel Livingston> 06-Jul-2017
-// Called after the server has updated the event in
-// the database.
-function respondEditEvent(){
-	
 }
 
 function editTask(calTask){
-	$(".error-message").html(""); // reset error messages
 	$("#taskModal").css("display", "block");
 	$("#taskTitle").val(calTask.title);
 	$("#taskDescription").val(calTask.description);
@@ -449,40 +361,13 @@ function editTask(calTask){
 		$("#taskModal").css("display", "none");
 		calTask.title = $("#taskTitle").val();
 		calTask.description = $("#taskDescription").val();
-		calTask.start = moment($("#taskAssignDate").val() + ' ' + $("#taskAssignTime").val(), "MM/DD/YYYY HH:mm");
-		calTask.end = moment($("#taskDueDate").val() + ' ' +  $("#taskDueTime").val(), "MM/DD/YYYY HH:mm");
-		calTask.assignDate = moment($("#taskAssignDate").val() + ' ' + $("#taskAssignTime").val(), "MM/DD/YYYY HH:mm");
-		calTask.dueDate = moment($("#taskDueDate").val() + ' ' + $("#taskDueTime").val(), "MM/DD/YYYY HH:mm");
+		calTask.start = $("#taskAssignDate").val() + ' ' + $("#taskAssignTime").val();
+		calTask.end = $("#taskDueDate").val() + ' ' +  $("#taskDueTime").val();
+		calTask.assignDate = moment($("#taskAssignDate").val() + ' ' + $("#taskAssignTime").val());
+		calTask.dueDate = moment($("#taskDueDate").val() + ' ' + $("#taskDueTime").val());
 		calTask.priority = $("#taskPriority").val();
 		calTask.timeToComplete = $("#taskTimeToComplete").val();
 		
-		// Create task object from calTask
-		var task = {
-				title: calTask.title,
-				description: calTask.description,
-				start: calTask.start,
-				end: calTask.end,
-				assignDate: calTask.assignDate,
-				dueDate: calTask.dueDate,
-				priority: calTask.priority,
-				timeToComplete: calTask.timeToComplete
-		};
-		
-		// Send updated task data to server
-		var data = JSON.stringify(task);
-		var xhr = new XMLHttpRequest();
-		var url = "EditTask";
-		xhr.open("POST", url, true);
-		xhr.setRequestHeader("Content-Type", "application/json");
-		xhr.onreadystatechange = function() {
-		    if(xhr.readyState == 4 && xhr.status == 200) {
-		        respondEditTask(xhr.responseText);
-		    }
-		}
-		xhr.send(data);
-		
-		// This will go away once the server is responding
-		// to the AJAX call
 		$('#calendar').fullCalendar( 'updateEvent', calTask );
 	});
 	
@@ -490,19 +375,6 @@ function editTask(calTask){
 	$('#cancelTaskBtn').off().click(function(event){
 		$("#taskModal").css("display", "none");
 	});
-	
-	// Delete button callback
-	$('#deleteTaskBtn').off().click(function(event){
-		$("#taskModal").css("display", "none");
-		$('#calendar').fullCalendar( 'removeEvents', calTask.id );
-	});
-}
-
-// <Samuel Livingston> 06-Jul-2017
-// Called after the server has updated the task in
-// the database.
-function respondEditTask(){
-	
 }
 
 //Validate input as user inputs data
@@ -524,7 +396,7 @@ function validateEventData(){
 	}
 		
 	// Validate that the date is a date
-	var isDate = moment($("#eventStartDate").val(), "MM/DD/YYYY").isValid();
+	var isDate = moment($("#eventStartDate").val()).isValid();
 	if(!isDate){
 		$("#eventStartDate").siblings('.error-message').html('Please pick a date');
 		isValid = false;
@@ -549,11 +421,12 @@ function validateEventData(){
 $('#taskForm').find("input,select,textarea").on('change input', function(){
 	validateTaskData();
 });
+
 function validateTaskData(){
 	var isValid = true;
 		
 	// Validate that the assign date is a date
-	var isDate = moment($("#taskAssignDate").val(), "MM/DD/YYYY").isValid();
+	var isDate = moment($("#taskAssignDate").val()).isValid();
 	if(!isDate){
 		$("#taskAssignDate").siblings('.error-message').html('Please pick a date');
 		isValid = false;
@@ -563,7 +436,7 @@ function validateTaskData(){
 	}
 	
 	// Validate that the due date is a date
-	var isDate = moment($("#taskDueDate").val(), "MM/DD/YYYY").isValid();
+	var isDate = moment($("#taskDueDate").val()).isValid();
 	if(!isDate){
 		$("#taskDueDate").siblings('.error-message').html('Please pick a date');
 		isValid = false;
@@ -574,8 +447,8 @@ function validateTaskData(){
 	
 	// Validate that the due date is after or the same day as the assign date
 	if(isValid){
-		if(moment($("#taskDueDate").val(), "MM/DD/YYYY").isAfter(moment($("#taskAssignDate").val(), "MM/DD/YYYY")) ||
-				moment($("#taskDueDate").val(), "MM/DD/YYYY").isSame(moment($("#taskAssignDate").val(), "MM/DD/YYYY"))){
+		if(moment($("#taskDueDate").val()).isAfter(moment($("#taskAssignDate").val())) ||
+				moment($("#taskDueDate").val()).isSame(moment($("#taskAssignDate").val()))){
 			$("#taskDueDate").siblings('.error-message').html('');
 		}
 		else{
@@ -588,7 +461,7 @@ function validateTaskData(){
 	// if the due date and assign date are the same day
 	if(isValid){
 		// If the days are the same
-		if(moment($("#taskDueDate").val(), "MM/DD/YYYY").isSame(moment($("#taskAssignDate").val(), "MM/DD/YYYY"))){
+		if(moment($("#taskDueDate").val()).isSame(moment($("#taskAssignDate").val()))){
 			
 			var assignTime = $("#taskAssignTime").val();
 			var dueTime = $("#taskDueTime").val();
