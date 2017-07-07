@@ -52,25 +52,11 @@ var initialCalendarOptions = {
                 click: function() {
                     addTask();
                 }
-            },
-            callDatabase: {
-            	text: 'Call Database',
-            	click: function() {
-            	    var xhr = new XMLHttpRequest();
-            	    xhr.onreadystatechange = function() {
-            	        if (xhr.readyState == 4) {
-            	            var data = xhr.responseText;
-            	            alert(data);
-            	        }
-            	    }
-            	    xhr.open('GET', 'CallDatabase', true);
-            	    xhr.send(null);
-            	}
             }
         },
     	header:	{
-    		left:   'prev,next addEvent addTask callDatabase title ',
-            center: '',
+    		left:   'prev,next addEvent addTask',
+            center: 'title',
             right:  'today month agendaWeek agendaDay'
     	},    	
     	eventClick: function(calElement, jsEvent, view) {
@@ -167,6 +153,7 @@ function normalCalendar(){
 // <Samuel Livingston> 02-Jul-2017
 // Adds an event to the calendar
 function addEvent(){
+	$(".error-message").html(""); // reset error messages
 	selectDayCalendar(); // First select a day for the event
 	document.getElementById("eventForm").reset();
 	
@@ -189,6 +176,8 @@ function addEvent(){
 			return false;
 		
 		$("#eventModal").css("display", "none");
+		
+		// Make object with all the parameters for the event
 		var args = {
 				id: ID,
 				title: $("#eventTitle").val(),
@@ -197,6 +186,22 @@ function addEvent(){
 				eventType: 0,
 				description: $("#eventDescription").val()
 		}
+		
+		// Send new event data to server
+		var data = JSON.stringify(args);
+		var xhr = new XMLHttpRequest();
+		var url = "AddEvent";
+		xhr.open("POST", url, true);
+		xhr.setRequestHeader("Content-Type", "application/json");
+		xhr.onreadystatechange = function() {
+		    if(xhr.readyState == 4 && xhr.status == 200) {
+		        respondAddEvent(xhr.responseText);
+		    }
+		}
+		xhr.send(data);
+		
+		// This will go away once the server is responding
+		// to the AJAX call
 		newEvent = new Event( args );
 		$('#calendar').fullCalendar( 'renderEvent', newEvent, true);
 		EVENTS.push(newEvent);
@@ -214,9 +219,17 @@ function addEvent(){
 	});
 }
 
+// <Samuel Livingston> 06-Jul-2017
+// Called after the server has added the event to
+// the database.
+function respondAddEvent(){
+	
+}
+
 // <Samuel Livingston> 02-Jul-2017
 // Adds a task to the calendar
 function addTask(){
+	$(".error-message").html(""); // reset error messages
 	$("#taskModal").css("display", "block");
 	document.getElementById("taskForm").reset();
 	
@@ -271,6 +284,22 @@ function addTask(){
 				priority: $("#taskPriority").val(),
 				timeToComplete: $("#taskTimeToComplete").val()
 		}
+		
+		// Send new task data to server
+		var data = JSON.stringify(args);
+		var xhr = new XMLHttpRequest();
+		var url = "AddTask";
+		xhr.open("POST", url, true);
+		xhr.setRequestHeader("Content-Type", "application/json");
+		xhr.onreadystatechange = function() {
+		    if(xhr.readyState == 4 && xhr.status == 200) {
+		        respondAddTask(xhr.responseText);
+		    }
+		}
+		xhr.send(data);
+		
+		// This will go away once the server is responding
+		// to the AJAX call
 		newTask = new Task( args );
 		$('#calendar').fullCalendar( 'renderEvent', newTask, true);
 		TASKS.push(newTask);
@@ -288,9 +317,12 @@ function addTask(){
 	});
 }
 
-$(".readonly").on('keydown paste', function(e){
-    e.preventDefault();
-});
+//<Samuel Livingston> 06-Jul-2017
+//Called after the server has added the task to
+//the database.
+function respondAddTask(){
+	
+}
 
 // <Samuel Livingston> 30-Jun-2017
 // Callback for date input in event dialog. Closes the event
@@ -314,6 +346,7 @@ function viewElement(calElement){
 }
 
 function editEvent(calEvent){
+	$(".error-message").html(""); // reset error messages
 	$("#eventModal").css("display", "block");
 	$("#eventTitle").val(calEvent.title);
 	$("#eventDescription").val(calEvent.description);
@@ -336,6 +369,30 @@ function editEvent(calEvent){
 		calEvent.description = $("#eventDescription").val();
 		calEvent.start = moment($("#eventStartDate").val() + ' ' + $("#eventStartTime").val(), "MM/DD/YYYY HH:mm");
 		calEvent.end = moment($("#eventStartDate").val() + ' ' + $("#eventEndTime").val(), "MM/DD/YYYY HH:mm");
+		
+		// Create event data from calEvent
+		var event = {
+				title: calEvent.title,
+				description: calEvent.description,
+				start: calEvent.start,
+				end: calEvent.end
+		};
+		
+		// Send updated event data to server
+		var data = JSON.stringify(calEvent);
+		var xhr = new XMLHttpRequest();
+		var url = "EditEvent";
+		xhr.open("POST", url, true);
+		xhr.setRequestHeader("Content-Type", "application/json");
+		xhr.onreadystatechange = function() {
+		    if(xhr.readyState == 4 && xhr.status == 200) {
+		        respondEditEvent(xhr.responseText);
+		    }
+		}
+		xhr.send(data);
+		
+		// This will go away once the server is responding
+		// to the AJAX call
 		$('#calendar').fullCalendar( 'updateEvent', calEvent );
 	});
 	
@@ -360,7 +417,15 @@ function editEvent(calEvent){
 	
 }
 
+// <Samuel Livingston> 06-Jul-2017
+// Called after the server has updated the event in
+// the database.
+function respondEditEvent(){
+	
+}
+
 function editTask(calTask){
+	$(".error-message").html(""); // reset error messages
 	$("#taskModal").css("display", "block");
 	$("#taskTitle").val(calTask.title);
 	$("#taskDescription").val(calTask.description);
@@ -391,6 +456,33 @@ function editTask(calTask){
 		calTask.priority = $("#taskPriority").val();
 		calTask.timeToComplete = $("#taskTimeToComplete").val();
 		
+		// Create task object from calTask
+		var task = {
+				title: calTask.title,
+				description: calTask.description,
+				start: calTask.start,
+				end: calTask.end,
+				assignDate: calTask.assignDate,
+				dueDate: calTask.dueDate,
+				priority: calTask.priority,
+				timeToComplete: calTask.timeToComplete
+		};
+		
+		// Send updated task data to server
+		var data = JSON.stringify(task);
+		var xhr = new XMLHttpRequest();
+		var url = "EditTask";
+		xhr.open("POST", url, true);
+		xhr.setRequestHeader("Content-Type", "application/json");
+		xhr.onreadystatechange = function() {
+		    if(xhr.readyState == 4 && xhr.status == 200) {
+		        respondEditTask(xhr.responseText);
+		    }
+		}
+		xhr.send(data);
+		
+		// This will go away once the server is responding
+		// to the AJAX call
 		$('#calendar').fullCalendar( 'updateEvent', calTask );
 	});
 	
@@ -404,6 +496,13 @@ function editTask(calTask){
 		$("#taskModal").css("display", "none");
 		$('#calendar').fullCalendar( 'removeEvents', calTask.id );
 	});
+}
+
+// <Samuel Livingston> 06-Jul-2017
+// Called after the server has updated the task in
+// the database.
+function respondEditTask(){
+	
 }
 
 //Validate input as user inputs data
