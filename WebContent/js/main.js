@@ -56,7 +56,7 @@ var initialCalendarOptions = {
             	            alert(data);
             	        }
             	    }
-            	    xhr.open('GET', 'CallDatabase', true);
+            	    xhr.open('GET', 'AddEvent', true);
             	    xhr.send(null);
             	}
             }
