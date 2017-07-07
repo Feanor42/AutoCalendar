@@ -52,6 +52,7 @@ public class AddEvent extends HttpServlet {
 	                		+ DateTimeEnd + ")";
 	                System.out.println(insertSql);
 					
+	                //This will need to be changed to PreparedStatement
 	                try (Statement statement = connection.createStatement();
 	                        ResultSet resultSet = statement.executeQuery(insertSql)) {
 
