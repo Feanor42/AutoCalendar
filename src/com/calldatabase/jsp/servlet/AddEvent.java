@@ -52,7 +52,7 @@ public class AddEvent extends HttpServlet {
 				UserID = 0;
 				Title = jObj.getString("title");
 				Description = jObj.getString("description");
-				Location = jObj.getString("location");
+				//Location = jObj.getString("location");
 				DateTimeStart = jObj.getString("start");
 				DateTimeEnd = jObj.getString("end");
 				
