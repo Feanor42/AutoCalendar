@@ -1,15 +1,17 @@
 package com.event;
 
-import java.sql.DateTime;
-
+import java.sql.Date;
+import java.sql.Time;
 
 
 
 public class Event {
 	
 	
-	private DateTime startDate;
-	private DateTime endDate;
+	private Date startDate;
+	private Date endDate;
+	private Time startTime;
+	private Time endTime;
 	private String title;
 	private String description;
 	private String location;
@@ -30,11 +32,12 @@ public class Event {
 	}
 	
 	//Overloaded constructer
-	public Event(DateTime sd, DateTime ed, String tit, String desc, String loc)
+	public Event(Date sd, Date ed, Time st, Time et, String tit, String desc, String loc)
 	{
 		startDate = sd;
 		endDate = ed;
-		
+		startTime = st;
+		endTime = et;
 		title = tit;
 		description = desc;
 		location = loc;
@@ -42,16 +45,26 @@ public class Event {
 		
 	}
 	
-	public DateTime getStartDate()
+	public Date getStartDate()
 	{
 		return startDate;
 	}
 	
-	public DateTime getEndDate()
+	public Date getEndDate()
 	{
 		return endDate;
 	}
-		
+	
+	public Time getStartTime()
+	{
+		return startTime;
+	}
+	
+	public Time getEndTime()
+	{
+		return endTime;
+	}
+	
 	public String getTitle()
 	{
 		return title;
@@ -67,16 +80,28 @@ public class Event {
 		return location;
 	}
 	
-	public void setStartDate(DateTime d)
+	
+	
+	public void setStartDate(Date d)
 	{
 		startDate = d;
 	}
 	
-	public void setEndDate(DateTime d)
+	public void setEndDate(Date d)
 	{
 		endDate = d;
 	}
-		
+	
+	public void setStartTime(Time t)
+	{
+		startTime = t;
+	}
+	
+	public void setEndTime(Time t)
+	{
+		endTime = t;
+	}
+	
 	public void setTitle(String tit)
 	{
 		title = tit;

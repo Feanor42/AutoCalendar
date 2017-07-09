@@ -4,8 +4,7 @@ import java.util.ArrayList;
 
 import com.event.Event;
 import com.event.Task;
-import com.event.ReoccurringEvent;
-import java.sql.DateTime;
+import java.sql.Date;
 
 public class Schedule {
 
@@ -44,6 +43,17 @@ public class Schedule {
 		
 	}
 	
-	public ArrayList
+	public ArrayList<Date> findViableTimes(Date due,Date assign,int length)
+	{
+		ArrayList<Date> possible = new ArrayList<Date>();
+		for(Event e: schedule)
+		{
+//			if(e.getStartDate() > due)
+//			{
+//				
+//			}
+		}
+		return possible;
+	}
 	
 }
