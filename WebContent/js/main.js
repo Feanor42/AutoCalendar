@@ -397,6 +397,7 @@ function editEvent(calEvent){
 		
 		// Create event data from calEvent
 		var event = {
+				id: calEvent.id,
 				title: calEvent.title,
 				description: calEvent.description,
 				start: calEvent.start,
@@ -483,6 +484,7 @@ function editTask(calTask){
 		
 		// Create task object from calTask
 		var task = {
+				id: calTask.id,
 				title: calTask.title,
 				description: calTask.description,
 				start: calTask.start,
