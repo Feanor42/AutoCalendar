@@ -1,6 +1,6 @@
 package com.event;
 
-import java.util.Date;
+import java.sql.Date;
 import java.sql.Time;
 
 
@@ -15,7 +15,7 @@ public class Event {
 	private String title;
 	private String description;
 	private String location;
-	private Identifier identifier;
+	
 	
 	//default constructer
 	public Event()
@@ -27,12 +27,12 @@ public class Event {
 		title = "";
 		description = "";
 		location = "";
-		identifier = null;
+		
 		
 	}
 	
 	//Overloaded constructer
-	public Event(Date sd, Date ed, Time st, Time et, String tit, String desc, String loc, Identifier id)
+	public Event(Date sd, Date ed, Time st, Time et, String tit, String desc, String loc)
 	{
 		startDate = sd;
 		endDate = ed;
@@ -41,7 +41,7 @@ public class Event {
 		title = tit;
 		description = desc;
 		location = loc;
-		identifier = id;
+		
 		
 	}
 	
@@ -80,10 +80,7 @@ public class Event {
 		return location;
 	}
 	
-	public Identifier getIdentifier()
-	{
-		return identifier;
-	}
+	
 	
 	public void setStartDate(Date d)
 	{
