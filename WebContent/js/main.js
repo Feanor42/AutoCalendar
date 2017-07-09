@@ -208,8 +208,8 @@ function addEvent(){
 		var args = {
 				id: ID,
 				title: $("#eventTitle").val(),
-				start: moment($("#eventStartDate").val() + ' ' + $("#eventStartTime").val(), "MM/DD/YYYY HH:mm"), 
-				end: moment($("#eventStartDate").val() + ' ' + $("#eventEndTime").val(), "MM/DD/YYYY HH:mm"), 
+				start: moment($("#eventStartDate").val() + ' ' + $("#eventStartTime").val(), "MM/DD/YYYY HH:mm").format("YYYY-MM-DD HH:mm:ss"), 
+				end: moment($("#eventStartDate").val() + ' ' + $("#eventEndTime").val(), "MM/DD/YYYY HH:mm").format("YYYY-MM-DD HH:mm:ss"), 
 				eventType: 0,
 				description: $("#eventDescription").val()
 		}
@@ -301,12 +301,12 @@ function addTask(){
 		var args = {
 				id: ID,
 				title: $("#taskTitle").val(),
-				start: moment($("#taskAssignDate").val() + ' ' + $("#taskAssignTime").val(), "MM/DD/YYYY HH:mm"),
-				end: moment($("#taskDueDate").val() + ' ' +  $("#taskDueTime").val(), "MM/DD/YYYY HH:mm"),
+				start: moment($("#taskAssignDate").val() + ' ' + $("#taskAssignTime").val(), "MM/DD/YYYY HH:mm").format("YYYY-MM-DD HH:mm:ss"),
+				end: moment($("#taskDueDate").val() + ' ' +  $("#taskDueTime").val(), "MM/DD/YYYY HH:mm").format("YYYY-MM-DD HH:mm:ss"),
 				eventType: 0,
 				description: $("#taskDescription").val(),
-				assignDate: moment($("#taskAssignDate").val() + ' ' +  $("#taskAssignTime").val(), "MM/DD/YYYY HH:mm"),
-				dueDate: moment($("#taskDueDate").val() + ' ' +  $("#taskDueTime").val(), "MM/DD/YYYY HH:mm"),
+				assignDate: moment($("#taskAssignDate").val() + ' ' +  $("#taskAssignTime").val(), "MM/DD/YYYY HH:mm").format("YYYY-MM-DD HH:mm:ss"),
+				dueDate: moment($("#taskDueDate").val() + ' ' +  $("#taskDueTime").val(), "MM/DD/YYYY HH:mm").format("YYYY-MM-DD HH:mm:ss"),
 				priority: $("#taskPriority").val(),
 				timeToComplete: $("#taskTimeToComplete").val()
 		}
