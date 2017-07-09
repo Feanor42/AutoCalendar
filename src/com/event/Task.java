@@ -1,6 +1,6 @@
 package com.event;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class Task extends Event{
 
@@ -37,7 +37,7 @@ public class Task extends Event{
 		return due;
 	}
 	
-	public int estimatedLength()
+	public int getEstimatedLength()
 	{
 		return estimatedLength;
 	}

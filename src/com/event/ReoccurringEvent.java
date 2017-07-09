@@ -2,7 +2,7 @@ package com.event;
 
 import java.util.List;
 import java.sql.Time;
-import java.util.Date;
+import java.sql.Date;
 
 public class ReoccurringEvent extends Event{
 
@@ -24,9 +24,9 @@ public class ReoccurringEvent extends Event{
 	 * b begining date of the period
 	 * f final date of the period
 	 */
-	public ReoccurringEvent(Date sd, Date ed, Time st, Time et, String tit, String desc, String loc, Identifier id, Boolean[] d, Date b, Date f)
+	public ReoccurringEvent(Date sd, Date ed, Time st, Time et, String tit, String desc, String loc,  Boolean[] d, Date b, Date f)
 	{
-		super( sd, ed, st, et, tit, desc, loc, id);
+		super( sd, ed, st, et, tit, desc, loc);
 		days = d;
 		begin = b;
 		finish = f;
