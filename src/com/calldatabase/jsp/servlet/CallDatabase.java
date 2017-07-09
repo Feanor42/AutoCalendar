@@ -6,12 +6,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.lang.Object;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -30,7 +25,7 @@ public class CallDatabase extends HttpServlet {
         try {
         	    Class.forName(driver).newInstance();
                 connection = DriverManager.getConnection(url);
-                String schema = connection.getSchema();
+                connection.getSchema();
 
                 String insertSql = "INSERT INTO Event (UserID, EventID, EventType, Title, Description, Location, DateTimeStart, DateTimeEnd) VALUES (?,?,?,?,?,?,?,?);";
                 
