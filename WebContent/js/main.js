@@ -4,9 +4,43 @@
 
 // Global variables
 var MODALS = document.getElementsByClassName("modal");
-var EVENTS = [];
-var TASKS = [];
 var ID = 0; // Temporary ID
+
+// <Samuel Livingston> 08-Jul-2017
+// Get all the events from the database
+function getEvents(){
+	var xhr = new XMLHttpRequest();
+	var url = "GetEvents";
+	xhr.open("GET", url, true);
+	xhr.onreadystatechange = function() {
+	    if(xhr.readyState == 4 && xhr.status == 200) {
+	    	// Add all the events to the calendar
+	        var events = JSON.parse(xhr.responseText);
+	        for(var i = 0; i < events.length; i++){
+	        	$('#calendar').fullCalendar( 'renderEvent', event[i], true);
+	        }
+	    }
+	}
+	xhr.send();
+}
+
+//<Samuel Livingston> 08-Jul-2017
+//Get all the tasks from the database
+function getTasks(){
+	var xhr = new XMLHttpRequest();
+	var url = "GetTasks";
+	xhr.open("GET", url, true);
+	xhr.onreadystatechange = function() {
+	    if(xhr.readyState == 4 && xhr.status == 200) {
+	    	// Add all the tasks to the calendar
+	        var tasks = JSON.parse(xhr.responseText);
+	        for(var i = 0; i < tasks.length; i++){
+	        	$('#calendar').fullCalendar( 'renderEvent', task[i], true);
+	        }
+	    }
+	}
+	xhr.send();
+}
 
 // <Samuel Livingston> 03-Jul-2017
 // This function only needs to run once. It generates the
@@ -93,7 +127,8 @@ var selectDayCalendarOptions = {
 
 $(document).ready(function() {
     $('#calendar').fullCalendar(initialCalendarOptions); // Initialize fullcalendar
-    showEvents();
+    getEvents(); // Get and show all events in database
+    getTasks(); // Get and show all tasks in database
 });
 
 // <Samuel Livingston> 30-Jun-2017
@@ -123,14 +158,6 @@ function Task(args){
 	this.timeToComplete = args.timeToComplete;
 	this.type = 'Task';
 	this.color = '#ff9635';
-}
-
-// <Samuel Livingston> 30-Jun-2017
-// Shows all the events on the calendar
-function showEvents(){
-	for( var i = 0; i < EVENTS.length; i++){
-		$('#calendar').fullCalendar( 'renderEvent', EVENTS[i], true);
-	}
 }
 
 // <Samuel Livingston> 30-Jun-2017
@@ -204,7 +231,6 @@ function addEvent(){
 		// to the AJAX call
 		newEvent = new Event( args );
 		$('#calendar').fullCalendar( 'renderEvent', newEvent, true);
-		EVENTS.push(newEvent);
 		ID++;
 	});
 	
@@ -302,7 +328,6 @@ function addTask(){
 		// to the AJAX call
 		newTask = new Task( args );
 		$('#calendar').fullCalendar( 'renderEvent', newTask, true);
-		TASKS.push(newTask);
 		ID++;
 	});
 	
@@ -372,6 +397,7 @@ function editEvent(calEvent){
 		
 		// Create event data from calEvent
 		var event = {
+				id: calEvent.id,
 				title: calEvent.title,
 				description: calEvent.description,
 				start: calEvent.start,
@@ -458,6 +484,7 @@ function editTask(calTask){
 		
 		// Create task object from calTask
 		var task = {
+				id: calTask.id,
 				title: calTask.title,
 				description: calTask.description,
 				start: calTask.start,
