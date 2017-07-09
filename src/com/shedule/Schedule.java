@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.event.Event;
 import com.event.Task;
 import com.event.ReoccurringEvent;
+import java.sql.DateTime;
 
 public class Schedule {
 
@@ -34,5 +35,15 @@ public class Schedule {
 	{
 		schedule.remove(e);
 	}
+	
+	public void addTaskToSchedule(Task T)
+	{
+		Date due = T.getDueDate();
+		Date assign = T.getAssignDate();
+		int length = T.getEstimatedLength();
+		
+	}
+	
+	public ArrayList
 	
 }

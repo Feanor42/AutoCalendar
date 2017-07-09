@@ -1,21 +1,19 @@
 package com.event;
 
-import java.util.Date;
-import java.sql.Time;
+import java.sql.DateTime;
+
 
 
 
 public class Event {
 	
 	
-	private Date startDate;
-	private Date endDate;
-	private Time startTime;
-	private Time endTime;
+	private DateTime startDate;
+	private DateTime endDate;
 	private String title;
 	private String description;
 	private String location;
-	private Identifier identifier;
+	
 	
 	//default constructer
 	public Event()
@@ -27,44 +25,33 @@ public class Event {
 		title = "";
 		description = "";
 		location = "";
-		identifier = null;
+		
 		
 	}
 	
 	//Overloaded constructer
-	public Event(Date sd, Date ed, Time st, Time et, String tit, String desc, String loc, Identifier id)
+	public Event(DateTime sd, DateTime ed, String tit, String desc, String loc)
 	{
 		startDate = sd;
 		endDate = ed;
-		startTime = st;
-		endTime = et;
+		
 		title = tit;
 		description = desc;
 		location = loc;
-		identifier = id;
+		
 		
 	}
 	
-	public Date getStartDate()
+	public DateTime getStartDate()
 	{
 		return startDate;
 	}
 	
-	public Date getEndDate()
+	public DateTime getEndDate()
 	{
 		return endDate;
 	}
-	
-	public Time getStartTime()
-	{
-		return startTime;
-	}
-	
-	public Time getEndTime()
-	{
-		return endTime;
-	}
-	
+		
 	public String getTitle()
 	{
 		return title;
@@ -80,31 +67,16 @@ public class Event {
 		return location;
 	}
 	
-	public Identifier getIdentifier()
-	{
-		return identifier;
-	}
-	
-	public void setStartDate(Date d)
+	public void setStartDate(DateTime d)
 	{
 		startDate = d;
 	}
 	
-	public void setEndDate(Date d)
+	public void setEndDate(DateTime d)
 	{
 		endDate = d;
 	}
-	
-	public void setStartTime(Time t)
-	{
-		startTime = t;
-	}
-	
-	public void setEndTime(Time t)
-	{
-		endTime = t;
-	}
-	
+		
 	public void setTitle(String tit)
 	{
 		title = tit;

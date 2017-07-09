@@ -1,11 +1,11 @@
 package com.event;
 
-import java.util.Date;
+import java.sql.DateTime;
 
 public class Task extends Event{
 
-	private Date assign;
-	private Date due;
+	private DateTime assign;
+	private DateTime due;
 	private int estimatedLength;
 	private int priority;
 	
@@ -27,17 +27,17 @@ public class Task extends Event{
 		priority = p;				
 	}
 	
-	public Date getAssignDate()
+	public DateTime getAssignDate()
 	{
 		return assign;
 	}
 	
-	public Date getDueDate()
+	public DateTime getDueDate()
 	{
 		return due;
 	}
 	
-	public int estimatedLength()
+	public int getEstimatedLength()
 	{
 		return estimatedLength;
 	}
