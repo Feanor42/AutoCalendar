@@ -26,6 +26,7 @@ public class GetEvents extends HttpServlet {
         String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
 
         try {
+        		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
                 connection = DriverManager.getConnection(url);
                 String schema = connection.getSchema();
 
@@ -52,12 +53,26 @@ public class GetEvents extends HttpServlet {
         JSONArray jsonArray = new JSONArray();
         while (resultSet.next()) {
             int rows = resultSet.getMetaData().getColumnCount();
+            JSONObject obj = new JSONObject();
             for (int i = 0; i < rows; i++) {
-                JSONObject obj = new JSONObject();
-                obj.put(resultSet.getMetaData().getColumnLabel(i + 1)
-                        .toLowerCase(), resultSet.getObject(i + 1));
-                jsonArray.put(obj);
+            	String column = resultSet.getMetaData().getColumnLabel(i + 1).toLowerCase();
+            	switch (column) {
+            		case "eventid":  column = "id";
+            		break;
+            		case "title":  column = "title";
+            		break;
+            		case "datetimestart":  column = "start";
+            		break;
+            		case "datetimeend":  column = "end";
+            		break;
+            		case "eventtype":  column = "eventType";
+            		break;
+            		case "description":  column = "description";
+            		break;	
+            	}
+                obj.put(column, resultSet.getObject(i + 1));
             }
+            jsonArray.put(obj);
         }
         
         // Show json Array as a string
