@@ -17,7 +17,8 @@ function getEvents(){
 	    	// Add all the events to the calendar
 	        var events = JSON.parse(xhr.responseText);
 	        for(var i = 0; i < events.length; i++){
-	        	$('#calendar').fullCalendar( 'renderEvent', events[i], true);
+	        	var newEvent = new Event(events[i]);
+	        	$('#calendar').fullCalendar( 'renderEvent', newEvent, true);
 	        }
 	    }
 	}
@@ -35,7 +36,8 @@ function getTasks(){
 	    	// Add all the tasks to the calendar
 	        var tasks = JSON.parse(xhr.responseText);
 	        for(var i = 0; i < tasks.length; i++){
-	        	$('#calendar').fullCalendar( 'renderEvent', tasks[i], true);
+	        	var newTask = new Task(tasks[i]);
+	        	$('#calendar').fullCalendar( 'renderEvent', newTask, true);
 	        }
 	    }
 	}
@@ -206,7 +208,6 @@ function addEvent(){
 		
 		// Make object with all the parameters for the event
 		var args = {
-				id: ID,
 				title: $("#eventTitle").val(),
 				start: moment($("#eventStartDate").val() + ' ' + $("#eventStartTime").val(), "MM/DD/YYYY HH:mm").format("YYYY-MM-DD HH:mm:ss"), 
 				end: moment($("#eventStartDate").val() + ' ' + $("#eventEndTime").val(), "MM/DD/YYYY HH:mm").format("YYYY-MM-DD HH:mm:ss"), 
@@ -222,16 +223,12 @@ function addEvent(){
 		xhr.setRequestHeader("Content-Type", "application/json");
 		xhr.onreadystatechange = function() {
 		    if(xhr.readyState == 4 && xhr.status == 200) {
-		        respondAddEvent(xhr.responseText);
+		    	// Create new event from JSON data
+		    	var newEvent = new Event( JSON.parse(xhr.responseText) ); 
+		    	$('#calendar').fullCalendar( 'renderEvent', newEvent, true);
 		    }
 		}
 		xhr.send(data);
-		
-		// This will go away once the server is responding
-		// to the AJAX call
-		newEvent = new Event( args );
-		$('#calendar').fullCalendar( 'renderEvent', newEvent, true);
-		ID++;
 	});
 	
 	// Cancel button callback
@@ -243,13 +240,6 @@ function addEvent(){
 	$('#deleteEventBtn').off().click(function(event){
 		$("#eventModal").css("display", "none");
 	});
-}
-
-// <Samuel Livingston> 06-Jul-2017
-// Called after the server has added the event to
-// the database.
-function respondAddEvent(){
-	
 }
 
 // <Samuel Livingston> 02-Jul-2017
@@ -319,7 +309,9 @@ function addTask(){
 		xhr.setRequestHeader("Content-Type", "application/json");
 		xhr.onreadystatechange = function() {
 		    if(xhr.readyState == 4 && xhr.status == 200) {
-		        respondAddTask(xhr.responseText);
+		    	// Create new task from JSON data
+		    	var newTask = new Task( JSON.parse(xhr.responseText) ); 
+		    	$('#calendar').fullCalendar( 'renderEvent', newTask, true);
 		    }
 		}
 		xhr.send(data);
@@ -340,13 +332,6 @@ function addTask(){
 	$('#deleteTaskBtn').off().click(function(event){
 		$("#taskModal").css("display", "none");
 	});
-}
-
-//<Samuel Livingston> 06-Jul-2017
-//Called after the server has added the task to
-//the database.
-function respondAddTask(){
-	
 }
 
 // <Samuel Livingston> 30-Jun-2017
@@ -396,7 +381,7 @@ function editEvent(calEvent){
 		calEvent.end = moment($("#eventStartDate").val() + ' ' + $("#eventEndTime").val(), "MM/DD/YYYY HH:mm");
 		
 		// Create event data from calEvent
-		var event = {
+		var editedEvent = {
 				id: calEvent.id,
 				title: calEvent.title,
 				description: calEvent.description,
@@ -405,21 +390,19 @@ function editEvent(calEvent){
 		};
 		
 		// Send updated event data to server
-		var data = JSON.stringify(calEvent);
+		var data = JSON.stringify(editedEvent);
 		var xhr = new XMLHttpRequest();
 		var url = "EditEvent";
 		xhr.open("POST", url, true);
 		xhr.setRequestHeader("Content-Type", "application/json");
 		xhr.onreadystatechange = function() {
 		    if(xhr.readyState == 4 && xhr.status == 200) {
-		        respondEditEvent(xhr.responseText);
+		        var updatedEvent = JSON.parse(xhr.responseText);
+		        $('#calendar').fullCalendar( 'updateEvent', updatedEvent );
 		    }
 		}
 		xhr.send(data);
 		
-		// This will go away once the server is responding
-		// to the AJAX call
-		$('#calendar').fullCalendar( 'updateEvent', calEvent );
 	});
 	
 	// Day selection callback
@@ -437,16 +420,20 @@ function editEvent(calEvent){
 	
 	// Delete button callback
 	$('#deleteEventBtn').off().click(function(event){
-		$("#eventModal").css("display", "none");
-		$('#calendar').fullCalendar( 'removeEvents', calEvent.id );
+		// Delete an event from the database
+		var data = calEvent.id;
+		var xhr = new XMLHttpRequest();
+		var url = "DeleteEvent";
+		xhr.open("POST", url, true);
+		xhr.setRequestHeader("Content-Type", "application/json");
+		xhr.onreadystatechange = function() {
+		    if(xhr.readyState == 4 && xhr.status == 200) {
+		    	$("#eventModal").css("display", "none");
+				$('#calendar').fullCalendar( 'removeEvents', calEvent.id );
+		    }
+		}
+		xhr.send(data);
 	});
-	
-}
-
-// <Samuel Livingston> 06-Jul-2017
-// Called after the server has updated the event in
-// the database.
-function respondEditEvent(){
 	
 }
 
