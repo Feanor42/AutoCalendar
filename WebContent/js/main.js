@@ -35,7 +35,7 @@ function getTasks(){
 	    	// Add all the tasks to the calendar
 	        var tasks = JSON.parse(xhr.responseText);
 	        for(var i = 0; i < tasks.length; i++){
-	        	$('#calendar').fullCalendar( 'renderEvent', task[i], true);
+	        	$('#calendar').fullCalendar( 'renderEvent', tasks[i], true);
 	        }
 	    }
 	}
