@@ -17,7 +17,7 @@ function getEvents(){
 	    	// Add all the events to the calendar
 	        var events = JSON.parse(xhr.responseText);
 	        for(var i = 0; i < events.length; i++){
-	        	$('#calendar').fullCalendar( 'renderEvent', event[i], true);
+	        	$('#calendar').fullCalendar( 'renderEvent', events[i], true);
 	        }
 	    }
 	}
@@ -35,7 +35,7 @@ function getTasks(){
 	    	// Add all the tasks to the calendar
 	        var tasks = JSON.parse(xhr.responseText);
 	        for(var i = 0; i < tasks.length; i++){
-	        	$('#calendar').fullCalendar( 'renderEvent', task[i], true);
+	        	$('#calendar').fullCalendar( 'renderEvent', tasks[i], true);
 	        }
 	    }
 	}
