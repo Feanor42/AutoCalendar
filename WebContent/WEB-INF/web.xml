@@ -21,13 +21,21 @@
         <servlet-name>AddEvent</servlet-name>
         <url-pattern>/AddEvent</url-pattern>
     </servlet-mapping>
-        <servlet>
+    <servlet>
         <servlet-name>DeleteEvent</servlet-name>
         <servlet-class>com.calldatabase.jsp.servlet.DeleteEvent</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>DeleteEvent</servlet-name>
         <url-pattern>/DeleteEvent</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>GetEvents</servlet-name>
+        <servlet-class>com.calldatabase.jsp.servlet.GetEvents</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetEvents</servlet-name>
+        <url-pattern>/GetEvents</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>UpdateEvent</servlet-name>
