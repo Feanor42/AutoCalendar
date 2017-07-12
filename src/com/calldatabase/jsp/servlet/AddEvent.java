@@ -30,8 +30,8 @@ public class AddEvent extends HttpServlet {
 		 	//initializing variables
 		 	int UserID = 0;
 	        int EventType = 1;
-	        String Title = "SampleEvent";
-	        String Description = "SampleDescription";
+	        String Title = "";
+	        String Description = "";
 	        String DateTimeStart = "";
 	        String DateTimeEnd = "";
 		 
@@ -105,7 +105,14 @@ public class AddEvent extends HttpServlet {
             try {
             	Statement statement = connection.createStatement();
                 ResultSet resultSet = statement.executeQuery(selectSql);
-                response.getWriter().write(convertToJSON(resultSet).toString());
+                
+                JSONArray array = convertToJSON(resultSet);
+                JSONObject object = new JSONObject();
+                for(int n = 0; n < array.length(); n++)
+                {
+                    object = array.getJSONObject(n);
+                }
+                response.getWriter().write(object.toString());
             }
             catch (Exception e) {
                 e.printStackTrace();
