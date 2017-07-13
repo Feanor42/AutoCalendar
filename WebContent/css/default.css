@@ -14,7 +14,7 @@ body {
 }
 
 /* Style text inputs */
-input[type=text],textarea, input[type=password]{
+input[type=text],textarea{
 	width: 100%;
     padding: 10px 10px;
     margin: 4px 0 4px 0;
@@ -215,14 +215,4 @@ label {
 @keyframes animateslide {
     from {left: -100%;} 
     to {left: 0}
-}
-
-#loginForm {
-	width: 50%;
-	text-align: center;
-	margin: 0 auto;
-}
-
-#login {
-	text-align: center;
 }
