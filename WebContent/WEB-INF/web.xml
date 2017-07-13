@@ -38,12 +38,12 @@
         <url-pattern>/GetEvents</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>UpdateEvent</servlet-name>
-        <servlet-class>com.calldatabase.jsp.servlet.UpdateEvent</servlet-class>
+        <servlet-name>EditEvent</servlet-name>
+        <servlet-class>com.calldatabase.jsp.servlet.EditEvent</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>UpdateEvent</servlet-name>
-        <url-pattern>/UpdateEvent</url-pattern>
+        <servlet-name>EditEvent</servlet-name>
+        <url-pattern>/EditEvent</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>CallDatabase</servlet-name>

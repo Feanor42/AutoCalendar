@@ -50,6 +50,7 @@ public class DeleteEvent extends HttpServlet {
 	                //This will need to be changed to PreparedStatement
 	                try (PreparedStatement statement = connection.prepareStatement(insertSql)) {
                         int count = statement.executeUpdate();
+                        System.out.println("Deleted: " + count + " row(s)");
 	                }
 	        }
 	        catch (Exception e) {
