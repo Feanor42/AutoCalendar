@@ -220,4 +220,9 @@ label {
 #loginForm {
 	width: 50%;
 	text-align: center;
+	margin: 0 auto;
+}
+
+#login {
+	text-align: center;
 }

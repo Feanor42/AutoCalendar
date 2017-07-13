@@ -121,12 +121,14 @@
 		</div>
 	</c:when>
 	<c:otherwise>
-		<h3>Welcome to Auto Calendar!</h3>
-		<form id="loginForm">
-			<input id="username" type="text" placeholder="Username">
-			<input id="password" type="password" placeholder="Password">
-			<button class="btn-default">Login</button>
-		</form>  
+		<div id="login">
+			<h3>Welcome to Auto Calendar!</h3>
+			<form id="loginForm" action="Login" method="post">
+				<input id="username" type="text" name="username" placeholder="Username">
+				<input id="password" type="password" name="password" placeholder="Password">
+				<button class="btn-default">Login</button>
+			</form>  
+		</div>
        	
     </c:otherwise>  
 </c:choose>
