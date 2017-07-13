@@ -129,6 +129,16 @@
 				<button class="btn-default">Login</button>
 			</form>  
 		</div>
+		
+		<div id="signup">
+			<h3>Sign up</h3>
+			<form id="signupForm" action="Signup" method="post">
+				<input id="username" type="text" name="username" placeholder="Username">
+				<input id="password" type="password" name="password" placeholder="Password">
+				<input id="email" type="text" name="email" placeholder="Email">
+				<button class="btn-default">Sign up</button>
+			</form>  
+		</div>
        	
     </c:otherwise>  
 </c:choose>

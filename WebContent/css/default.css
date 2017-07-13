@@ -226,3 +226,13 @@ label {
 #login {
 	text-align: center;
 }
+
+#signupForm {
+	width: 50%;
+	text-align: center;
+	margin: 0 auto;
+}
+
+#signup {
+	text-align: center;
+}
