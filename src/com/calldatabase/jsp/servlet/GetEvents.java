@@ -36,7 +36,6 @@ public class GetEvents extends HttpServlet {
                 try {
                 	Statement statement = connection.createStatement();
                     ResultSet resultSet = statement.executeQuery(selectSql);
-                    //convertToJSON(resultSet);
                     response.getWriter().write(convertToJSON(resultSet).toString());
                 }
                 catch (Exception e) {
@@ -76,7 +75,6 @@ public class GetEvents extends HttpServlet {
         }
         
         // Show json Array as a string
-        System.out.println(jsonArray.toString());
         return jsonArray;
         
     }
