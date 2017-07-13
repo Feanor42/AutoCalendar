@@ -503,8 +503,8 @@ function editTask(calTask){
 		        tasks[0].description = updatedTask.description;
 		        tasks[0].start = updatedTask.start;
 		        tasks[0].end = updatedTask.end;
-		        tasks[0].assignDate = updatedTask.assignDate;
-		        tasks[0].dueDate = updatedTask.dueDate;
+		        tasks[0].assignDate = moment(updatedTask.assignDate, "YYYY-MM-DD HH:mm:ss");
+		        tasks[0].dueDate = moment(updatedTask.dueDate, "YYYY-MM-DD HH:mm:ss");
 		        tasks[0].priority = updatedTask.priority;
 		        tasks[0].timeToComplete = updatedTask.timeToComplete;
 		        
