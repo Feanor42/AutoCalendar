@@ -18,16 +18,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
-
-
-//<Brent Ufkes> 06-July-2017
-//Add event servlet
-public class AddEvent extends HttpServlet {
+//<Brent Ufkes> 09-July-2017
+//Update event servlet
+public class EditEvent extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	 protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		 	//initializing variables
+		//initializing variables
 		 	int UserID = 0;
 		 	int EventID = 0;
 	        int EventType = 1;
@@ -43,6 +40,7 @@ public class AddEvent extends HttpServlet {
 		    
 		    JSONObject jObj;
 		    
+		    
 		    //updating parameters
 		    while( (str = br.readLine()) != null ){
 		        sb.append(str);
@@ -51,12 +49,14 @@ public class AddEvent extends HttpServlet {
 		    try {
 				jObj = new JSONObject(sb.toString());
 				UserID = 0;
+				EventID = jObj.getInt("id");
 				Title = jObj.getString("title");
 				Description = jObj.getString("description");
 				DateTimeStart = jObj.getString("start");
 				DateTimeEnd = jObj.getString("end");
 				
 			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		    
@@ -73,30 +73,25 @@ public class AddEvent extends HttpServlet {
 	                String schema = connection.getSchema();
 
 	                // Prepared statement to insert data
-	                String insertSql = "INSERT INTO Event (UserID, EventType, Title, Description, DateTimeStart, DateTimeEnd)"
-	                		+ " VALUES (?,?,?,?,?,?)";
+	                String insertSql = "UPDATE Event SET UserID=?, EventType=?, Title=?, Description=?, DateTimeStart=?, DateTimeEnd=?"
+	                		+ " WHERE EventID=?";
 	                System.out.println(insertSql);
 					
 	                //This will need to be changed to PreparedStatement
-	                try (PreparedStatement statement = connection.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS)) {
+	                try (PreparedStatement statement = connection.prepareStatement(insertSql)) {
 	                	statement.setInt(1, UserID);
 	                	statement.setInt(2, EventType);
 	                	statement.setString(3, Title);
 	                	statement.setString(4, Description);
 	                	statement.setString(5, DateTimeStart);
 	                	statement.setString(6, DateTimeEnd);
+	                	statement.setInt(7, EventID);
 
-                        int count = statement.executeUpdate();
-                        System.out.println("Inserted: " + count + " row(s)");
-                        
-                        //After Query, save the auto generated EventID to be sent back
-                        ResultSet rs = statement.getGeneratedKeys();
-                        if (rs.next()) {
-                            EventID=rs.getInt(1);   
-                                    System.out.println("Auto Generated Primary Key " + EventID); 
-                         }
-       
+                     int count = statement.executeUpdate();
+                     System.out.println("Updated: " + count + " row(s)");
+	                
 	                }
+	                queryResult = insertSql;
 	        }
 	        catch (Exception e) {
 	                e.printStackTrace();
@@ -104,24 +99,24 @@ public class AddEvent extends HttpServlet {
 	             
 	    	
 	    	//After event was added, send JSONArray of it back as response
-            String selectSql = "SELECT * FROM Event WHERE EventID=" + EventID;
-            System.out.println(selectSql);
+         String selectSql = "SELECT * FROM Event WHERE EventID=" + EventID;
+         System.out.println(selectSql);
 
-            try {
-            	Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery(selectSql);
-                
-                JSONArray array = convertToJSON(resultSet);
-                JSONObject object = new JSONObject();
-                for(int n = 0; n < array.length(); n++)
-                {
-                    object = array.getJSONObject(n);
-                }
-                response.getWriter().write(object.toString());
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
+         try {
+         	Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(selectSql);
+             
+             JSONArray array = convertToJSON(resultSet);
+             JSONObject object = new JSONObject();
+             for(int n = 0; n < array.length(); n++)
+             {
+                 object = array.getJSONObject(n);
+             }
+             response.getWriter().write(object.toString());
+         }
+         catch (Exception e) {
+             e.printStackTrace();
+         }
 	    	
 	 }
 	
@@ -156,4 +151,5 @@ public class AddEvent extends HttpServlet {
 	        return jsonArray;
 	        
 	    }
+		 
 }
