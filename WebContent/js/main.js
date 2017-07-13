@@ -378,8 +378,8 @@ function editEvent(calEvent){
 				id: calEvent.id,
 				title: calEvent.title,
 				description: calEvent.description,
-				start: calEvent.start,
-				end: calEvent.end
+				start: calEvent.start.format('YYYY-MM-DD HH:mm:ss'),
+				end: calEvent.end.format('YYYY-MM-DD HH:mm:ss')
 		};
 		
 		// Send updated event data to server
@@ -477,10 +477,10 @@ function editTask(calTask){
 				id: calTask.id,
 				title: calTask.title,
 				description: calTask.description,
-				start: calTask.start,
-				end: calTask.end,
-				assignDate: calTask.assignDate,
-				dueDate: calTask.dueDate,
+				start: calTask.start.format('YYYY-MM-DD HH:mm:ss'),
+				end: calTask.end.format('YYYY-MM-DD HH:mm:ss'),
+				assignDate: calTask.assignDate.format('YYYY-MM-DD HH:mm:ss'),
+				dueDate: calTask.dueDate.format('YYYY-MM-DD HH:mm:ss'),
 				priority: calTask.priority,
 				timeToComplete: calTask.timeToComplete
 		};
