@@ -73,6 +73,8 @@ public class GetTasks extends HttpServlet {
             		case "priority":  column = "priority";
             		break;	
             		case "timetocomplete":  column = "timeToComplete";
+            		break;
+            		case "assigndate":  column = "assignDate";
             		break;	
             	}
                 obj.put(column, resultSet.getObject(i + 1));
