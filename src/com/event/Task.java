@@ -27,6 +27,13 @@ public class Task extends Event{
 		estimatedLength = e;
 		//priority = p;				
 	}
+	public Task(Time start,Time end,String title,String des,Time d,int e,Time a)
+	{
+		super(start,end,title,des);
+		assign = a;
+		due = d;
+		estimatedLength = e;
+	}
 	
 	public Time getAssignDate()
 	{

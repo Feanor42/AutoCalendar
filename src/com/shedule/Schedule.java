@@ -51,49 +51,49 @@ public class Schedule {
 	
 	public void addTaskToSchedule(Task T)
 	{
-		Date due = T.getDueDate();
-		Date assign = T.getAssignDate();
+		Time due = T.getDueDate();
+		Time assign = T.getAssignDate();
 		int length = T.getEstimatedLength();
-		HashMap<Date,Time> possible = findViableTimes(due, assign, length);
-		possible = eliminateOutliers(possible);
+//		HashMap<Date,Time> possible = findViableTimes(due, assign, length);
+//		possible = eliminateOutliers(possible);
 		
 	}
 	
-	private HashMap<Date,Time> findViableTimes(Date due,Date assign,int length)
-	{
-		HashMap<Date,Time> possible = new HashMap<Date,Time>();
-		
-		for(int i = 0; i<schedule.size();i++)
-		{
-			Event e = schedule.get(i);
-			if(e.getStartDate().after(due))
-			{
-				break;
-			}
-			if(e.getStartDate().after(assign)&& i< schedule.size()-1)
-			{
-				Event next = schedule.get(i+1);
-				if((next.getStartTime().getTime()-5)-(e.getEndTime().getTime()+5) > length)
-				{
-					Date d = e.getEndDate();
-					long temp = e.getEndTime().getTime()+5;
-					Time t = new Time(temp);
-					
-					possible.put(d, t);
-				}
-			}
-			else if(e.getStartDate().after(assign)&& i== schedule.size()-1)
-			{
-				Date d = e.getEndDate();
-				long temp = e.getEndTime().getTime()+5;
-				Time t = new Time(temp);
-				
-				possible.put(d, t);
-				
-			}
-		}
-		return possible;
-	}
+//	private HashMap<Date,Time> findViableTimes(Date due,Date assign,int length)
+//	{
+//		HashMap<Date,Time> possible = new HashMap<Date,Time>();
+//		
+//		for(int i = 0; i<schedule.size();i++)
+//		{
+//			Event e = schedule.get(i);
+//			if(e.getStartDate().after(due))
+//			{
+//				break;
+//			}
+//			if(e.getStartDate().after(assign)&& i< schedule.size()-1)
+//			{
+//				Event next = schedule.get(i+1);
+//				if((next.getStartTime().getTime()-5)-(e.getEndTime().getTime()+5) > length)
+//				{
+//					Date d = e.getEndDate();
+//					long temp = e.getEndTime().getTime()+5;
+//					Time t = new Time(temp);
+//					
+//					possible.put(d, t);
+//				}
+//			}
+//			else if(e.getStartDate().after(assign)&& i== schedule.size()-1)
+//			{
+//				Date d = e.getEndDate();
+//				long temp = e.getEndTime().getTime()+5;
+//				Time t = new Time(temp);
+//				
+//				possible.put(d, t);
+//				
+//			}
+//		}
+//		return possible;
+//	}
 	
 	@SuppressWarnings("rawtypes")
 	private HashMap<Date,Time> eliminateOutliers(HashMap<Date,Time> possible)
@@ -158,6 +158,9 @@ public class Schedule {
                     }
                     selectSql = "SELECT * FROM Task WHERE UserID=0";
                     r = statement.executeQuery(selectSql);
+                    int et = 0;
+                    Time due = null;
+                    Time ass = null;
                     while (r.next()) {
                         int rows = r.getMetaData().getColumnCount();
                         
@@ -165,24 +168,26 @@ public class Schedule {
                         	String column = r.getMetaData().getColumnLabel(i + 1).toLowerCase();
                         	
                         	switch (column) {
-                        	case "title":  column = "title";
-                    		break;
+                    		case "title":  column = "title";
+                    			title = (String) r.getObject(i+1);
                     		case "datetimestart":  column = "start";
-                    		break;
+                    			start = (Time) r.getObject(i+1);
                     		case "datetimeend":  column = "end";
-                    		break;
+                    			end= (Time) r.getObject(i+1);
                     		case "description":  column = "description";
-                    		break;
-                    		case "datetimedue":  column = "dueDate";
-                    		break;	
+                    			des = (String) r.getObject(i+1);
+                    		case "datedue":  column = "dueDate";
+                    			due = (Time) r.getObject(i+1);
                     		case "priority":  column = "priority";
-                    		break;	
-                    		case "timetocomplete":  column = "timeToComplete";
-                    		break;	
+                    			break;	
+                    		case "estimatedtime":  column = "timeToComplete";
+                    			et = (int) r.getObject(i+1);
+                    		case "assigndate":  column = "assignDate";
+                    			ass = (Time) r.getObject(i+1);
                         	}
                             
                         }
-                        Event e = new Task(start,end,title,des);
+                        Event e = new Task(start,end,title,des,due, et,ass);
                         schedule.add(e);
                 }
                 }
@@ -196,7 +201,8 @@ public class Schedule {
         }
     }
 		
-	}
+	
+
 	
 	
 	
