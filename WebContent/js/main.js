@@ -289,7 +289,6 @@ function addTask(){
 		
 		$("#taskModal").css("display", "none");
 		var args = {
-				id: ID,
 				title: $("#taskTitle").val(),
 				start: moment($("#taskAssignDate").val() + ' ' + $("#taskAssignTime").val(), "MM/DD/YYYY HH:mm").format("YYYY-MM-DD HH:mm:ss"),
 				end: moment($("#taskDueDate").val() + ' ' +  $("#taskDueTime").val(), "MM/DD/YYYY HH:mm").format("YYYY-MM-DD HH:mm:ss"),
@@ -315,12 +314,6 @@ function addTask(){
 		    }
 		}
 		xhr.send(data);
-		
-		// This will go away once the server is responding
-		// to the AJAX call
-		newTask = new Task( args );
-		$('#calendar').fullCalendar( 'renderEvent', newTask, true);
-		ID++;
 	});
 	
 	// Cancel button callback
@@ -500,14 +493,25 @@ function editTask(calTask){
 		xhr.setRequestHeader("Content-Type", "application/json");
 		xhr.onreadystatechange = function() {
 		    if(xhr.readyState == 4 && xhr.status == 200) {
-		        respondEditTask(xhr.responseText);
+	    	 	var updatedTask = JSON.parse( xhr.responseText );
+		        
+		        // Get fullcalendar event object based on id of updated task
+		        var tasks = $('#calendar').fullCalendar( 'clientEvents', updatedTask.id );
+		        
+		        // Update fullcalendar event object
+		        tasks[0].title = updatedTask.title;
+		        tasks[0].description = updatedTask.description;
+		        tasks[0].start = updatedTask.start;
+		        tasks[0].end = updatedTask.end;
+		        tasks[0].assignDate = updatedTask.assignDate;
+		        tasks[0].dueDate = updatedTask.dueDate;
+		        tasks[0].priority = updatedTask.priority;
+		        tasks[0].timeToComplete = updatedTask.timeToComplete;
+		        
+		        $('#calendar').fullCalendar( 'updateEvent', tasks[0] );
 		    }
 		}
 		xhr.send(data);
-		
-		// This will go away once the server is responding
-		// to the AJAX call
-		$('#calendar').fullCalendar( 'updateEvent', calTask );
 	});
 	
 	// Cancel button callback
@@ -517,16 +521,20 @@ function editTask(calTask){
 	
 	// Delete button callback
 	$('#deleteTaskBtn').off().click(function(event){
-		$("#taskModal").css("display", "none");
-		$('#calendar').fullCalendar( 'removeEvents', calTask.id );
+		// Delete a task from the database
+		var data = calTask.id;
+		var xhr = new XMLHttpRequest();
+		var url = "DeleteTask";
+		xhr.open("POST", url, true);
+		xhr.setRequestHeader("Content-Type", "application/json");
+		xhr.onreadystatechange = function() {
+		    if(xhr.readyState == 4 && xhr.status == 200) {
+		    	$("#taskModal").css("display", "none");
+				$('#calendar').fullCalendar( 'removeEvents', calTask.id );
+		    }
+		}
+		xhr.send(data);
 	});
-}
-
-// <Samuel Livingston> 06-Jul-2017
-// Called after the server has updated the task in
-// the database.
-function respondEditTask(){
-	
 }
 
 //Validate input as user inputs data
