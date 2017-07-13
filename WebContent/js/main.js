@@ -398,7 +398,17 @@ function editEvent(calEvent){
 		xhr.onreadystatechange = function() {
 		    if(xhr.readyState == 4 && xhr.status == 200) {
 		        var updatedEvent = JSON.parse(xhr.responseText);
-		        $('#calendar').fullCalendar( 'updateEvent', updatedEvent );
+		        
+		        // Get fullcalendar event object based on id of updated event
+		        var events = $('#calendar').fullCalendar( 'clientEvents', updatedEvent.id );
+		        
+		        // Update fullcalendar event object
+		        events[0].title = updatedEvent.title;
+		        events[0].description = updatedEvent.description;
+		        events[0].start = updatedEvent.start;
+		        events[0].end = updatedEvent.end;
+		        
+		        $('#calendar').fullCalendar( 'updateEvent', events[0] );
 		    }
 		}
 		xhr.send(data);
