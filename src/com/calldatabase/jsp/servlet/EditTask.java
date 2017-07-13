@@ -18,7 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-//<Brent Ufkes> 09-July-2017
+//<Brent Ufkes> 13-July-2017
 //Update event servlet
 public class EditTask extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -26,12 +26,15 @@ public class EditTask extends HttpServlet {
 
 		//initializing variables
 		 	int UserID = 0;
-		 	int EventID = 0;
-	        int EventType = 1;
+		 	int TaskID = 0;
 	        String Title = "";
 	        String Description = "";
+	        String DateTimeDue = "";
 	        String DateTimeStart = "";
 	        String DateTimeEnd = "";
+	        String Priority = "";
+	        String TimeToComplete = "";
+	        String AssignDate = "";
 		 
 	        //building json object
 		 	StringBuilder sb = new StringBuilder();
@@ -39,7 +42,6 @@ public class EditTask extends HttpServlet {
 		    String str;
 		    
 		    JSONObject jObj;
-		    
 		    
 		    //updating parameters
 		    while( (str = br.readLine()) != null ){
@@ -49,14 +51,19 @@ public class EditTask extends HttpServlet {
 		    try {
 				jObj = new JSONObject(sb.toString());
 				UserID = 0;
-				EventID = jObj.getInt("id");
+				TaskID = jObj.getInt("id");
 				Title = jObj.getString("title");
 				Description = jObj.getString("description");
+				DateTimeDue = jObj.getString("dueDate");
 				DateTimeStart = jObj.getString("start");
 				DateTimeEnd = jObj.getString("end");
+				Priority = jObj.getString("priority");
+				TimeToComplete = jObj.getString("timeToComplete");
+				AssignDate = jObj.getString("assignDate");
+				
+				System.out.println(jObj.toString());
 				
 			} catch (JSONException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		    
@@ -73,19 +80,24 @@ public class EditTask extends HttpServlet {
 	                String schema = connection.getSchema();
 
 	                // Prepared statement to insert data
-	                String insertSql = "UPDATE Event SET UserID=?, EventType=?, Title=?, Description=?, DateTimeStart=?, DateTimeEnd=?"
-	                		+ " WHERE EventID=?";
+	                String insertSql = "UPDATE Task SET UserID=?, Title=?, Description=?, "
+	                		+ "Priority=?, EstimatedTime=?, DateDue=?, " 
+	                		+ "DateTimeStart=?, DateTimeEnd=?, AssignDate=? "
+	                		+ " WHERE TaskID=?";
 	                System.out.println(insertSql);
 					
 	                //This will need to be changed to PreparedStatement
 	                try (PreparedStatement statement = connection.prepareStatement(insertSql)) {
 	                	statement.setInt(1, UserID);
-	                	statement.setInt(2, EventType);
-	                	statement.setString(3, Title);
-	                	statement.setString(4, Description);
-	                	statement.setString(5, DateTimeStart);
-	                	statement.setString(6, DateTimeEnd);
-	                	statement.setInt(7, EventID);
+	                	statement.setString(2, Title);
+	                	statement.setString(3, Description);
+	                	statement.setString(4, Priority);
+	                	statement.setString(5, TimeToComplete);
+	                	statement.setString(6, DateTimeDue);
+	                	statement.setString(7, DateTimeStart);
+	                	statement.setString(8, DateTimeEnd);
+	                	statement.setString(9, AssignDate);
+	                	statement.setInt(10, TaskID);
 
                      int count = statement.executeUpdate();
                      System.out.println("Updated: " + count + " row(s)");
@@ -99,7 +111,7 @@ public class EditTask extends HttpServlet {
 	             
 	    	
 	    	//After event was added, send JSONArray of it back as response
-         String selectSql = "SELECT * FROM Event WHERE EventID=" + EventID;
+         String selectSql = "SELECT * FROM Task WHERE TaskID=" + TaskID;
          System.out.println(selectSql);
 
          try {
@@ -129,7 +141,7 @@ public class EditTask extends HttpServlet {
 	            for (int i = 0; i < rows; i++) {
 	            	String column = resultSet.getMetaData().getColumnLabel(i + 1).toLowerCase();
 	            	switch (column) {
-	            		case "eventid":  column = "id";
+	            		case "taskid":  column = "id";
 	            		break;
 	            		case "title":  column = "title";
 	            		break;
@@ -140,6 +152,14 @@ public class EditTask extends HttpServlet {
 	            		case "eventtype":  column = "eventType";
 	            		break;
 	            		case "description":  column = "description";
+	            		break;
+	            		case "datedue":  column = "dueDate";
+	            		break;	
+	            		case "priority":  column = "priority";
+	            		break;	
+	            		case "estimatedtime":  column = "timeToComplete";
+	            		break;	
+	            		case "assigndate":  column = "assignDate";
 	            		break;	
 	            	}
 	                obj.put(column, resultSet.getObject(i + 1));
@@ -148,6 +168,7 @@ public class EditTask extends HttpServlet {
 	        }
 	        
 	        // Show json Array as a string
+	        System.out.println(jsonArray.toString());
 	        return jsonArray;
 	        
 	    }
