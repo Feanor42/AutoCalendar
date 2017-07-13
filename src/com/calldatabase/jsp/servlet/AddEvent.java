@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.sql.Timestamp;
 
 import javax.servlet.ServletException;
@@ -12,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,11 +29,9 @@ public class AddEvent extends HttpServlet {
 
 		 	//initializing variables
 		 	int UserID = 0;
-	        String EventID = "1";
 	        int EventType = 1;
-	        String Title = "SampleEvent";
-	        String Description = "SampleDescription";
-	        String Location = "Campus";
+	        String Title = "";
+	        String Description = "";
 	        String DateTimeStart = "";
 	        String DateTimeEnd = "";
 		 
@@ -52,7 +53,6 @@ public class AddEvent extends HttpServlet {
 				UserID = 0;
 				Title = jObj.getString("title");
 				Description = jObj.getString("description");
-				//Location = jObj.getString("location");
 				DateTimeStart = jObj.getString("start");
 				DateTimeEnd = jObj.getString("end");
 				
@@ -81,11 +81,9 @@ public class AddEvent extends HttpServlet {
 	                //This will need to be changed to PreparedStatement
 	                try (PreparedStatement statement = connection.prepareStatement(insertSql)) {
 	                	statement.setInt(1, UserID);
-	                	//statement.setString(2, EventID);
 	                	statement.setInt(2, EventType);
 	                	statement.setString(3, Title);
 	                	statement.setString(4, Description);
-	                	//statement.setString(5, Location);
 	                	statement.setString(5, DateTimeStart);
 	                	statement.setString(6, DateTimeEnd);
 
@@ -98,11 +96,60 @@ public class AddEvent extends HttpServlet {
 	        catch (Exception e) {
 	                e.printStackTrace();
 	        }
-	        
-	    	response.setContentType("text/plain");
-	    	response.setCharacterEncoding("UTF-8");
-	    	response.getWriter().write(queryResult);
 	             
-	        }
+	    	
+	    	//After event was added, send JSONArray of it back as response
+            String selectSql = "SELECT * FROM Event WHERE DateTimeStart='" + DateTimeStart + "' AND DateTimeEnd='" + DateTimeEnd + "'";
+            System.out.println(selectSql);
+
+            try {
+            	Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(selectSql);
+                
+                JSONArray array = convertToJSON(resultSet);
+                JSONObject object = new JSONObject();
+                for(int n = 0; n < array.length(); n++)
+                {
+                    object = array.getJSONObject(n);
+                }
+                response.getWriter().write(object.toString());
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+	    	
+	 }
 	
+	 public static JSONArray convertToJSON(ResultSet resultSet)
+	            throws Exception {
+	        JSONArray jsonArray = new JSONArray();
+	        while (resultSet.next()) {
+	            int rows = resultSet.getMetaData().getColumnCount();
+	            JSONObject obj = new JSONObject();
+	            for (int i = 0; i < rows; i++) {
+	            	String column = resultSet.getMetaData().getColumnLabel(i + 1).toLowerCase();
+	            	switch (column) {
+	            		case "eventid":  column = "id";
+	            		break;
+	            		case "title":  column = "title";
+	            		break;
+	            		case "datetimestart":  column = "start";
+	            		break;
+	            		case "datetimeend":  column = "end";
+	            		break;
+	            		case "eventtype":  column = "eventType";
+	            		break;
+	            		case "description":  column = "description";
+	            		break;	
+	            	}
+	                obj.put(column, resultSet.getObject(i + 1));
+	            }
+	            jsonArray.put(obj);
+	        }
+	        
+	        // Show json Array as a string
+	        //System.out.println(jsonArray.toString());
+	        return jsonArray;
+	        
+	    }
 }
