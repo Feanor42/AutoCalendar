@@ -45,7 +45,7 @@ public class DeleteTask extends HttpServlet {
 	                String schema = connection.getSchema();
 
 	                // Prepared statement to insert data
-	                String insertSql = "Delete Event WHERE TaskID=" + TaskID;
+	                String insertSql = "Delete Task WHERE TaskID=" + TaskID;
 					
 	                //This will need to be changed to PreparedStatement
 	                try (PreparedStatement statement = connection.prepareStatement(insertSql)) {
