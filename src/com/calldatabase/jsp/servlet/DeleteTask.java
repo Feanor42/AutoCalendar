@@ -13,9 +13,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-// <Brent Ufkes> 09-July-2017
-// Delete event servlet
-public class DeleteEvent extends HttpServlet {
+// <Brent Ufkes> 13-July-2017
+// Delete task servlet
+public class DeleteTask extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	 protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -30,8 +30,8 @@ public class DeleteEvent extends HttpServlet {
 		    } finally {
 		        reader.close();
 		    }
-		    String EventIDString = sb.toString();
-		    int EventID = Integer.parseInt(EventIDString);
+		    String TaskIDString = sb.toString();
+		    int TaskID = Integer.parseInt(TaskIDString);
 		    
 	    	// Connect to database
 	        String url = "jdbc:sqlserver://softwareengineeringuc.database.windows.net:1433;database=SoftwareEngineeringUC;user=ufkesba@softwareengineeringuc;password=Scout!2063;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
@@ -45,7 +45,7 @@ public class DeleteEvent extends HttpServlet {
 	                String schema = connection.getSchema();
 
 	                // Prepared statement to insert data
-	                String insertSql = "Delete Event WHERE EventID=" + EventID;
+	                String insertSql = "Delete Event WHERE TaskID=" + TaskID;
 					
 	                //This will need to be changed to PreparedStatement
 	                try (PreparedStatement statement = connection.prepareStatement(insertSql)) {

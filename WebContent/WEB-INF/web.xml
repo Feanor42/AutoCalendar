@@ -38,19 +38,43 @@
         <url-pattern>/GetEvents</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>UpdateEvent</servlet-name>
-        <servlet-class>com.calldatabase.jsp.servlet.UpdateEvent</servlet-class>
+        <servlet-name>EditEvent</servlet-name>
+        <servlet-class>com.calldatabase.jsp.servlet.EditEvent</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>UpdateEvent</servlet-name>
-        <url-pattern>/UpdateEvent</url-pattern>
+        <servlet-name>EditEvent</servlet-name>
+        <url-pattern>/EditEvent</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>CallDatabase</servlet-name>
-        <servlet-class>com.calldatabase.jsp.servlet.CallDatabase</servlet-class>
+        <servlet-name>AddTask</servlet-name>
+        <servlet-class>com.calldatabase.jsp.servlet.AddTask</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>CallDatabase</servlet-name>
-        <url-pattern>/CallDatabase</url-pattern>
+        <servlet-name>AddTask</servlet-name>
+        <url-pattern>/AddTask</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>DeleteTask</servlet-name>
+        <servlet-class>com.calldatabase.jsp.servlet.DeleteTask</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteTask</servlet-name>
+        <url-pattern>/DeleteTask</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>GetTasks</servlet-name>
+        <servlet-class>com.calldatabase.jsp.servlet.GetTasks</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetTasks</servlet-name>
+        <url-pattern>/GetTasks</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>EditTask</servlet-name>
+        <servlet-class>com.calldatabase.jsp.servlet.EditTask</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EditTask</servlet-name>
+        <url-pattern>/EditTask</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -17,7 +17,8 @@ function getEvents(){
 	    	// Add all the events to the calendar
 	        var events = JSON.parse(xhr.responseText);
 	        for(var i = 0; i < events.length; i++){
-	        	$('#calendar').fullCalendar( 'renderEvent', event[i], true);
+	        	var newEvent = new Event(events[i]);
+	        	$('#calendar').fullCalendar( 'renderEvent', newEvent, true);
 	        }
 	    }
 	}
@@ -35,7 +36,8 @@ function getTasks(){
 	    	// Add all the tasks to the calendar
 	        var tasks = JSON.parse(xhr.responseText);
 	        for(var i = 0; i < tasks.length; i++){
-	        	$('#calendar').fullCalendar( 'renderEvent', task[i], true);
+	        	var newTask = new Task(tasks[i]);
+	        	$('#calendar').fullCalendar( 'renderEvent', newTask, true);
 	        }
 	    }
 	}
@@ -152,8 +154,8 @@ function Task(args){
 	Task.prototype = Object.create(Event.prototype);
 	Task.prototype.constructor = Task;
 	
-	this.assignDate = args.assignDate;
-	this.dueDate = args.dueDate;
+	this.assignDate = moment( args.assignDate, "YYYY-MM-DD HH:mm:ss");
+	this.dueDate = moment( args.dueDate,  "YYYY-MM-DD HH:mm:ss");
 	this.priority = args.priority;
 	this.timeToComplete = args.timeToComplete;
 	this.type = 'Task';
@@ -206,7 +208,6 @@ function addEvent(){
 		
 		// Make object with all the parameters for the event
 		var args = {
-				id: ID,
 				title: $("#eventTitle").val(),
 				start: moment($("#eventStartDate").val() + ' ' + $("#eventStartTime").val(), "MM/DD/YYYY HH:mm").format("YYYY-MM-DD HH:mm:ss"), 
 				end: moment($("#eventStartDate").val() + ' ' + $("#eventEndTime").val(), "MM/DD/YYYY HH:mm").format("YYYY-MM-DD HH:mm:ss"), 
@@ -222,16 +223,12 @@ function addEvent(){
 		xhr.setRequestHeader("Content-Type", "application/json");
 		xhr.onreadystatechange = function() {
 		    if(xhr.readyState == 4 && xhr.status == 200) {
-		        respondAddEvent(xhr.responseText);
+		    	// Create new event from JSON data
+		    	var newEvent = new Event( JSON.parse(xhr.responseText) ); 
+		    	$('#calendar').fullCalendar( 'renderEvent', newEvent, true);
 		    }
 		}
 		xhr.send(data);
-		
-		// This will go away once the server is responding
-		// to the AJAX call
-		newEvent = new Event( args );
-		$('#calendar').fullCalendar( 'renderEvent', newEvent, true);
-		ID++;
 	});
 	
 	// Cancel button callback
@@ -243,13 +240,6 @@ function addEvent(){
 	$('#deleteEventBtn').off().click(function(event){
 		$("#eventModal").css("display", "none");
 	});
-}
-
-// <Samuel Livingston> 06-Jul-2017
-// Called after the server has added the event to
-// the database.
-function respondAddEvent(){
-	
 }
 
 // <Samuel Livingston> 02-Jul-2017
@@ -299,7 +289,6 @@ function addTask(){
 		
 		$("#taskModal").css("display", "none");
 		var args = {
-				id: ID,
 				title: $("#taskTitle").val(),
 				start: moment($("#taskAssignDate").val() + ' ' + $("#taskAssignTime").val(), "MM/DD/YYYY HH:mm").format("YYYY-MM-DD HH:mm:ss"),
 				end: moment($("#taskDueDate").val() + ' ' +  $("#taskDueTime").val(), "MM/DD/YYYY HH:mm").format("YYYY-MM-DD HH:mm:ss"),
@@ -319,16 +308,12 @@ function addTask(){
 		xhr.setRequestHeader("Content-Type", "application/json");
 		xhr.onreadystatechange = function() {
 		    if(xhr.readyState == 4 && xhr.status == 200) {
-		        respondAddTask(xhr.responseText);
+		    	// Create new task from JSON data
+		    	var newTask = new Task( JSON.parse(xhr.responseText) ); 
+		    	$('#calendar').fullCalendar( 'renderEvent', newTask, true);
 		    }
 		}
 		xhr.send(data);
-		
-		// This will go away once the server is responding
-		// to the AJAX call
-		newTask = new Task( args );
-		$('#calendar').fullCalendar( 'renderEvent', newTask, true);
-		ID++;
 	});
 	
 	// Cancel button callback
@@ -340,13 +325,6 @@ function addTask(){
 	$('#deleteTaskBtn').off().click(function(event){
 		$("#taskModal").css("display", "none");
 	});
-}
-
-//<Samuel Livingston> 06-Jul-2017
-//Called after the server has added the task to
-//the database.
-function respondAddTask(){
-	
 }
 
 // <Samuel Livingston> 30-Jun-2017
@@ -396,7 +374,7 @@ function editEvent(calEvent){
 		calEvent.end = moment($("#eventStartDate").val() + ' ' + $("#eventEndTime").val(), "MM/DD/YYYY HH:mm");
 		
 		// Create event data from calEvent
-		var event = {
+		var editedEvent = {
 				id: calEvent.id,
 				title: calEvent.title,
 				description: calEvent.description,
@@ -405,21 +383,29 @@ function editEvent(calEvent){
 		};
 		
 		// Send updated event data to server
-		var data = JSON.stringify(calEvent);
+		var data = JSON.stringify(editedEvent);
 		var xhr = new XMLHttpRequest();
 		var url = "EditEvent";
 		xhr.open("POST", url, true);
 		xhr.setRequestHeader("Content-Type", "application/json");
 		xhr.onreadystatechange = function() {
 		    if(xhr.readyState == 4 && xhr.status == 200) {
-		        respondEditEvent(xhr.responseText);
+		        var updatedEvent = JSON.parse(xhr.responseText);
+		        
+		        // Get fullcalendar event object based on id of updated event
+		        var events = $('#calendar').fullCalendar( 'clientEvents', updatedEvent.id );
+		        
+		        // Update fullcalendar event object
+		        events[0].title = updatedEvent.title;
+		        events[0].description = updatedEvent.description;
+		        events[0].start = updatedEvent.start;
+		        events[0].end = updatedEvent.end;
+		        
+		        $('#calendar').fullCalendar( 'updateEvent', events[0] );
 		    }
 		}
 		xhr.send(data);
 		
-		// This will go away once the server is responding
-		// to the AJAX call
-		$('#calendar').fullCalendar( 'updateEvent', calEvent );
 	});
 	
 	// Day selection callback
@@ -437,16 +423,20 @@ function editEvent(calEvent){
 	
 	// Delete button callback
 	$('#deleteEventBtn').off().click(function(event){
-		$("#eventModal").css("display", "none");
-		$('#calendar').fullCalendar( 'removeEvents', calEvent.id );
+		// Delete an event from the database
+		var data = calEvent.id;
+		var xhr = new XMLHttpRequest();
+		var url = "DeleteEvent";
+		xhr.open("POST", url, true);
+		xhr.setRequestHeader("Content-Type", "application/json");
+		xhr.onreadystatechange = function() {
+		    if(xhr.readyState == 4 && xhr.status == 200) {
+		    	$("#eventModal").css("display", "none");
+				$('#calendar').fullCalendar( 'removeEvents', calEvent.id );
+		    }
+		}
+		xhr.send(data);
 	});
-	
-}
-
-// <Samuel Livingston> 06-Jul-2017
-// Called after the server has updated the event in
-// the database.
-function respondEditEvent(){
 	
 }
 
@@ -503,14 +493,25 @@ function editTask(calTask){
 		xhr.setRequestHeader("Content-Type", "application/json");
 		xhr.onreadystatechange = function() {
 		    if(xhr.readyState == 4 && xhr.status == 200) {
-		        respondEditTask(xhr.responseText);
+	    	 	var updatedTask = JSON.parse( xhr.responseText );
+		        
+		        // Get fullcalendar event object based on id of updated task
+		        var tasks = $('#calendar').fullCalendar( 'clientEvents', updatedTask.id );
+		        
+		        // Update fullcalendar event object
+		        tasks[0].title = updatedTask.title;
+		        tasks[0].description = updatedTask.description;
+		        tasks[0].start = updatedTask.start;
+		        tasks[0].end = updatedTask.end;
+		        tasks[0].assignDate = updatedTask.assignDate;
+		        tasks[0].dueDate = updatedTask.dueDate;
+		        tasks[0].priority = updatedTask.priority;
+		        tasks[0].timeToComplete = updatedTask.timeToComplete;
+		        
+		        $('#calendar').fullCalendar( 'updateEvent', tasks[0] );
 		    }
 		}
 		xhr.send(data);
-		
-		// This will go away once the server is responding
-		// to the AJAX call
-		$('#calendar').fullCalendar( 'updateEvent', calTask );
 	});
 	
 	// Cancel button callback
@@ -520,16 +521,20 @@ function editTask(calTask){
 	
 	// Delete button callback
 	$('#deleteTaskBtn').off().click(function(event){
-		$("#taskModal").css("display", "none");
-		$('#calendar').fullCalendar( 'removeEvents', calTask.id );
+		// Delete a task from the database
+		var data = calTask.id;
+		var xhr = new XMLHttpRequest();
+		var url = "DeleteTask";
+		xhr.open("POST", url, true);
+		xhr.setRequestHeader("Content-Type", "application/json");
+		xhr.onreadystatechange = function() {
+		    if(xhr.readyState == 4 && xhr.status == 200) {
+		    	$("#taskModal").css("display", "none");
+				$('#calendar').fullCalendar( 'removeEvents', calTask.id );
+		    }
+		}
+		xhr.send(data);
 	});
-}
-
-// <Samuel Livingston> 06-Jul-2017
-// Called after the server has updated the task in
-// the database.
-function respondEditTask(){
-	
 }
 
 //Validate input as user inputs data

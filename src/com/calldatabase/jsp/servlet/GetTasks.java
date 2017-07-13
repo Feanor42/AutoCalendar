@@ -15,7 +15,7 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 
 
-public class GetEvents extends HttpServlet {
+public class GetTasks extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -31,7 +31,7 @@ public class GetEvents extends HttpServlet {
                 String schema = connection.getSchema();
 
                 // Create and execute a SELECT SQL statement.
-                String selectSql = "SELECT * FROM Event WHERE UserID=0";
+                String selectSql = "SELECT * FROM Task WHERE UserID=0";
 
                 try {
                 	Statement statement = connection.createStatement();
@@ -47,7 +47,7 @@ public class GetEvents extends HttpServlet {
         }
     }
     
-    public static JSONArray convertToJSON(ResultSet resultSet)
+	public static JSONArray convertToJSON(ResultSet resultSet)
             throws Exception {
         JSONArray jsonArray = new JSONArray();
         while (resultSet.next()) {
@@ -56,7 +56,7 @@ public class GetEvents extends HttpServlet {
             for (int i = 0; i < rows; i++) {
             	String column = resultSet.getMetaData().getColumnLabel(i + 1).toLowerCase();
             	switch (column) {
-            		case "eventid":  column = "id";
+            		case "taskid":  column = "id";
             		break;
             		case "title":  column = "title";
             		break;
@@ -67,6 +67,12 @@ public class GetEvents extends HttpServlet {
             		case "eventtype":  column = "eventType";
             		break;
             		case "description":  column = "description";
+            		break;
+            		case "datetimedue":  column = "dueDate";
+            		break;	
+            		case "priority":  column = "priority";
+            		break;	
+            		case "timetocomplete":  column = "timeToComplete";
             		break;	
             	}
                 obj.put(column, resultSet.getObject(i + 1));
@@ -75,6 +81,7 @@ public class GetEvents extends HttpServlet {
         }
         
         // Show json Array as a string
+        System.out.println(jsonArray.toString());
         return jsonArray;
         
     }
