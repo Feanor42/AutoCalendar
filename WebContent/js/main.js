@@ -154,8 +154,8 @@ function Task(args){
 	Task.prototype = Object.create(Event.prototype);
 	Task.prototype.constructor = Task;
 	
-	this.assignDate = args.assignDate;
-	this.dueDate = args.dueDate;
+	this.assignDate = moment( args.assignDate, "YYYY-MM-DD HH:mm:ss");
+	this.dueDate = moment( args.dueDate,  "YYYY-MM-DD HH:mm:ss");
 	this.priority = args.priority;
 	this.timeToComplete = args.timeToComplete;
 	this.type = 'Task';
@@ -378,8 +378,8 @@ function editEvent(calEvent){
 				id: calEvent.id,
 				title: calEvent.title,
 				description: calEvent.description,
-				start: calEvent.start,
-				end: calEvent.end
+				start: calEvent.start.format('YYYY-MM-DD HH:mm:ss'),
+				end: calEvent.end.format('YYYY-MM-DD HH:mm:ss')
 		};
 		
 		// Send updated event data to server
@@ -477,10 +477,10 @@ function editTask(calTask){
 				id: calTask.id,
 				title: calTask.title,
 				description: calTask.description,
-				start: calTask.start,
-				end: calTask.end,
-				assignDate: calTask.assignDate,
-				dueDate: calTask.dueDate,
+				start: calTask.start.format('YYYY-MM-DD HH:mm:ss'),
+				end: calTask.end.format('YYYY-MM-DD HH:mm:ss'),
+				assignDate: calTask.assignDate.format('YYYY-MM-DD HH:mm:ss'),
+				dueDate: calTask.dueDate.format('YYYY-MM-DD HH:mm:ss'),
 				priority: calTask.priority,
 				timeToComplete: calTask.timeToComplete
 		};
@@ -503,8 +503,8 @@ function editTask(calTask){
 		        tasks[0].description = updatedTask.description;
 		        tasks[0].start = updatedTask.start;
 		        tasks[0].end = updatedTask.end;
-		        tasks[0].assignDate = updatedTask.assignDate;
-		        tasks[0].dueDate = updatedTask.dueDate;
+		        tasks[0].assignDate = moment(updatedTask.assignDate, "YYYY-MM-DD HH:mm:ss");
+		        tasks[0].dueDate = moment(updatedTask.dueDate, "YYYY-MM-DD HH:mm:ss");
 		        tasks[0].priority = updatedTask.priority;
 		        tasks[0].timeToComplete = updatedTask.timeToComplete;
 		        

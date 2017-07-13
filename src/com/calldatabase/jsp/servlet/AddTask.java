@@ -37,6 +37,7 @@ public class AddTask extends HttpServlet {
 	        String DateTimeEnd = "";
 	        String Priority = "";
 	        String TimeToComplete = "";
+	        String AssignDate = "";
 		 
 	        //building json object
 		 	StringBuilder sb = new StringBuilder();
@@ -61,6 +62,7 @@ public class AddTask extends HttpServlet {
 				DateTimeEnd = jObj.getString("end");
 				Priority = jObj.getString("priority");
 				TimeToComplete = jObj.getString("timeToComplete");
+				AssignDate = jObj.getString("assignDate");
 				
 				System.out.println(jObj.toString());
 				
@@ -87,8 +89,8 @@ public class AddTask extends HttpServlet {
 	                String schema = connection.getSchema();
 
 	                // Prepared statement to insert data
-	                String insertSql = "INSERT INTO Task (UserID, Title, Description, Priority, EstimatedTime, DateDue, DateTimeStart, DateTimeEnd)"
-	                		+ " VALUES (?,?,?,?,?,?,?,?)";
+	                String insertSql = "INSERT INTO Task (UserID, Title, Description, Priority, EstimatedTime, DateDue, DateTimeStart, DateTimeEnd, AssignDate)"
+	                		+ " VALUES (?,?,?,?,?,?,?,?,?)";
 	                System.out.println(insertSql);
 					
 	                //This will need to be changed to PreparedStatement
@@ -101,6 +103,8 @@ public class AddTask extends HttpServlet {
 	                	statement.setString(6, DateTimeDue);
 	                	statement.setString(7, DateTimeStart);
 	                	statement.setString(8, DateTimeEnd);
+	                	statement.setString(9, AssignDate);
+	                	
 
                         int count = statement.executeUpdate();
                         System.out.println("Inserted: " + count + " row(s)");
@@ -162,11 +166,13 @@ public class AddTask extends HttpServlet {
 	            		break;
 	            		case "description":  column = "description";
 	            		break;
-	            		case "datetimedue":  column = "dueDate";
+	            		case "datedue":  column = "dueDate";
 	            		break;	
 	            		case "priority":  column = "priority";
 	            		break;	
 	            		case "estimatedtime":  column = "timeToComplete";
+	            		break;	
+	            		case "assigndate":  column = "assignDate";
 	            		break;	
 	            	}
 	                obj.put(column, resultSet.getObject(i + 1));
