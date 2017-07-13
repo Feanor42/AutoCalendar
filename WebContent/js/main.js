@@ -154,8 +154,8 @@ function Task(args){
 	Task.prototype = Object.create(Event.prototype);
 	Task.prototype.constructor = Task;
 	
-	this.assignDate = args.assignDate;
-	this.dueDate = args.dueDate;
+	this.assignDate = moment( args.assignDate, "YYYY-MM-DD HH:mm:ss");
+	this.dueDate = moment( args.dueDate,  "YYYY-MM-DD HH:mm:ss");
 	this.priority = args.priority;
 	this.timeToComplete = args.timeToComplete;
 	this.type = 'Task';
