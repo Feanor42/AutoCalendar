@@ -68,11 +68,11 @@ public class GetTasks extends HttpServlet {
             		break;
             		case "description":  column = "description";
             		break;
-            		case "datetimedue":  column = "dueDate";
+            		case "datedue":  column = "dueDate";
             		break;	
             		case "priority":  column = "priority";
             		break;	
-            		case "timetocomplete":  column = "timeToComplete";
+            		case "estimatedtime":  column = "timeToComplete";
             		break;
             		case "assigndate":  column = "assignDate";
             		break;	

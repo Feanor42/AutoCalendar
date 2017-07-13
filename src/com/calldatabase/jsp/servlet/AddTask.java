@@ -166,7 +166,7 @@ public class AddTask extends HttpServlet {
 	            		break;
 	            		case "description":  column = "description";
 	            		break;
-	            		case "datetimedue":  column = "dueDate";
+	            		case "datedue":  column = "dueDate";
 	            		break;	
 	            		case "priority":  column = "priority";
 	            		break;	
