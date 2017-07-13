@@ -4,24 +4,34 @@ import java.util.ArrayList;
 
 import com.event.Event;
 import com.event.Task;
+
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.sql.Time;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.json.JSONObject;
+
 public class Schedule {
 
 	private ArrayList<Event> schedule;
 	
-	public Schedule()
-	{
-		schedule = new ArrayList<Event>();
-	}
+
 	
 	public Schedule(ArrayList<Event> s)
 	{
 		schedule = s;
+	}
+	
+	public Schedule()
+	{
+		schedule = new ArrayList<Event>();
+		generateSchedule();
 	}
 	
 	public ArrayList<Event> getSchedule()
@@ -102,6 +112,93 @@ public class Schedule {
 		}
 		return possible;
 	}
+	
+	private void generateSchedule()
+	{
+		String url = "jdbc:sqlserver://softwareengineeringuc.database.windows.net:1433;database=SoftwareEngineeringUC;user=ufkesba@softwareengineeringuc;password=Scout!2063;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
+        Connection connection = null;
+        String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+
+        try {
+        		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+                connection = DriverManager.getConnection(url);
+                String schema = connection.getSchema();
+
+                // Create and execute a SELECT SQL statement.
+                String selectSql = "SELECT * FROM Event WHERE UserID=0";
+
+                try {
+                	Statement statement = connection.createStatement();
+                    ResultSet r = statement.executeQuery(selectSql);
+                    String title = "";
+                    Time start = null;
+                    Time end = null;
+                    String des = "";
+                    while (r.next()) {
+                        int rows = r.getMetaData().getColumnCount();
+                        
+                        for (int i = 0; i < rows; i++) {
+                        	String column = r.getMetaData().getColumnLabel(i + 1).toLowerCase();
+                        	
+                        	switch (column) {
+                        		case "title":  column = "title";
+                        			title = (String) r.getObject(i+1);
+                        		case "datetimestart":  column = "start";
+                        			start = (Time) r.getObject(i+1);
+                        		case "datetimeend":  column = "end";
+                        			end= (Time) r.getObject(i+1);
+                        		case "description":  column = "description";
+                        			des = (String) r.getObject(i+1);
+                        	}
+                            
+                        }
+                        Event e = new Event(start,end,title,des);
+                        schedule.add(e);
+                        
+                    }
+                    selectSql = "SELECT * FROM Task WHERE UserID=0";
+                    r = statement.executeQuery(selectSql);
+                    while (r.next()) {
+                        int rows = r.getMetaData().getColumnCount();
+                        
+                        for (int i = 0; i < rows; i++) {
+                        	String column = r.getMetaData().getColumnLabel(i + 1).toLowerCase();
+                        	
+                        	switch (column) {
+                        	case "title":  column = "title";
+                    		break;
+                    		case "datetimestart":  column = "start";
+                    		break;
+                    		case "datetimeend":  column = "end";
+                    		break;
+                    		case "description":  column = "description";
+                    		break;
+                    		case "datetimedue":  column = "dueDate";
+                    		break;	
+                    		case "priority":  column = "priority";
+                    		break;	
+                    		case "timetocomplete":  column = "timeToComplete";
+                    		break;	
+                        	}
+                            
+                        }
+                        Event e = new Task(start,end,title,des);
+                        schedule.add(e);
+                }
+                }
+                
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+        }
+        catch (Exception e) {
+                e.printStackTrace();
+        }
+    }
+		
+	}
+	
+	
 	
 	
 }

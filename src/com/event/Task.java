@@ -1,13 +1,14 @@
 package com.event;
 
 import java.sql.Date;
+import java.sql.Time;
 
 public class Task extends Event{
 
-	private Date assign;
-	private Date due;
+	private Time assign;
+	private Time due;
 	private int estimatedLength;
-	private int priority;
+	//private int priority;
 	
 	public Task()
 	{
@@ -15,24 +16,24 @@ public class Task extends Event{
 		assign = null;
 		due = null;
 		estimatedLength = -1;
-		priority = -1;				
+		//priority = -1;				
 	}
 	
-	public Task(Date s, Date d, int e, int p)
+	public Task(Time a, Time d, Time s, Time end, int e, String t, String des)
 	{
-		super();
-		assign = s;
+		super(t,des);
+		assign = a;
 		due = d;
 		estimatedLength = e;
-		priority = p;				
+		//priority = p;				
 	}
 	
-	public Date getAssignDate()
+	public Time getAssignDate()
 	{
 		return assign;
 	}
 	
-	public Date getDueDate()
+	public Time getDueDate()
 	{
 		return due;
 	}
