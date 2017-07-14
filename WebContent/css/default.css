@@ -11,10 +11,78 @@ body {
 }
 .body {
 	overflow-x: hidden;
+	display: grid;
+  	grid-template-columns: repeat(3, 1fr);
+  	grid-gap: 0 10px;
+  	grid-template-areas: "header header header"
+  						 "start-page start-page start-page"
+  						 "calendar calendar calendar";
 }
 
-/* Style text inputs */
-input[type=text],textarea, input[type=password]{
+/* Style inputs */
+.btn-group {
+	grid-area: btn-group;
+}
+.event-title-group {
+	grid-area: event-title;
+}
+.event-description-group {
+	grid-area: event-desc;
+}
+.event-date-group {
+	grid-area: event-date;
+}
+.event-start-time-group {
+	grid-area: event-start-time;
+}
+.event-end-time-group {
+	grid-area: event-end-time;
+}
+#eventForm {
+	display: grid;
+	grid-gap: 5px 5px;
+	grid-template-columns: repeat(3, 1fr);
+	grid-template-areas: "event-title 	event-title       event-title"
+						 "event-desc 	event-desc 	      event-desc"
+						 "event-date 	event-start-time  event-end-time"
+						 "btn-group 	btn-group 		  btn-group";
+}
+.task-title-group {
+	grid-area: task-title;
+}
+.task-description-group {
+	grid-area: task-desc;
+}
+.task-assign-date-group {
+	grid-area: task-assign-date;
+}
+.task-due-date-group {
+	grid-area: task-due-date;
+}
+.task-assign-time-group {
+	grid-area: task-assign-time;
+}
+.task-due-time-group {
+	grid-area: task-due-time;
+}
+.task-est-time-group {
+	grid-area: task-est-time;
+}
+.task-priority-group {
+	grid-area: task-priority;
+}
+#taskForm {
+	display: grid;
+	grid-gap: 5px 5px;
+	grid-template-columns: repeat(2, 1fr);
+	grid-template-areas: "task-title 		task-title"
+						 "task-desc 		task-desc"
+						 "task-assign-date 	task-assign-time"
+						 "task-due-date		task-due-time"
+						 "task-est-time		task-priority"	
+						 "btn-group 		btn-group";
+}
+input[type=text], textarea, input[type=password]{
 	width: 100%;
     padding: 10px 10px;
     margin: 4px 0 4px 0;
@@ -35,6 +103,7 @@ input[type=number] {
 	display: block;
 	border: 1px solid #ccc;
 	font-size: 1em;
+	width: 100%;
 }
 textarea {
 	resize: none;
@@ -66,6 +135,11 @@ label {
 	align-self: center;
 	text-align: left;
 }
+.input-with-unit {
+	display: grid;
+	grid-template-columns: 75% auto;
+	grid-column-gap: 5px;
+}
 
 /* Style Buttons */
 .btn-default {
@@ -96,6 +170,9 @@ label {
     background-image: none;
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
 }
+.btn-wide {
+	width: 100%;
+}
 
 /* Header */
 .header {
@@ -103,6 +180,7 @@ label {
 	width: 100%;
 	margin-bottom: 1.75em; 
 	position: relative;
+	grid-area: header;
 }
 .title {
 	position: absolute;
@@ -133,6 +211,7 @@ label {
 /* Calendar */
 #calendar {
 	padding: 0 25px;
+	grid-area: calendar;
 }
 .fc-event{
     cursor: pointer;
@@ -217,22 +296,39 @@ label {
     to {left: 0}
 }
 
+/* Login Form and Sign up Form */
 #loginForm {
-	width: 50%;
 	text-align: center;
 	margin: 0 auto;
 }
 
 #login {
 	text-align: center;
+	grid-column: 1/2;
+	width: 90%;
+	justify-self: center;
 }
 
 #signupForm {
-	width: 50%;
 	text-align: center;
 	margin: 0 auto;
 }
 
 #signup {
 	text-align: center;
+	grid-column: 3/4;
+	width: 90%;
+	justify-self: center;
+}
+#startPage {
+	grid-area: start-page;
+	display: grid;
+	grid-template-columns: 1fr auto 1fr;
+}
+.start-page-title {
+	grid-column: 1/4;
+	text-align: center;
+}
+.or-divider {
+	align-self: center;
 }
