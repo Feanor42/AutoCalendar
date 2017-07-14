@@ -25,10 +25,10 @@ public class Login extends HttpServlet {
 		 //response.getWriter().write("Success");
 		 // session.username
 		 HttpSession session = request.getSession();
-		 String username = (String)request.getAttribute("userName");
-		 session.setAttribute("Brent", username);
+		 String username = (String)request.getParameter("username");
+		 session.setAttribute("username", username);
 		 
-		 //response.sendRedirect("index.jsp");
+		 response.sendRedirect("index.jsp");
 		    
 	 }
 	

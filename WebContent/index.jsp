@@ -24,7 +24,7 @@
 
 <%-- <c:set var="userName" value="Default" scope="session" /> --%>
 <c:choose>
-	<c:when test='${sessionScope["userName"] != null}'>
+	<c:when test='${sessionScope["username"] != null}'>
 		<div id='calendar'></div>
 
 		<!-- Create Event Modal -->
