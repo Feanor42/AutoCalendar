@@ -60,7 +60,7 @@ function getTasks(){
 				var $option = $("<option>");
 				$option.val(addZero(hours[i]+off) + ':' + addZero(min).toString());
 				$option.html(addZero(hours[i]) + ':' + addZero(min).toString() + ampm);
-				$('.time-selection').append($option);
+				$('select.time').append($option);
 			}
 		}
 	}
@@ -166,8 +166,8 @@ function Task(args){
 // Sets up calendar to allow user to select a day from the calendar. 
 function selectDayCalendar(){
 	$('#calendar').fullCalendar('option', selectDayCalendarOptions);
-	$('#pageTitle').addClass("pageTitleMove");
-	$('#selectDayTitle').addClass("selectDayTitleMove");
+	$('#pageTitle').css('left', '100%');
+	$('#selectDayTitle').css('left', '0');
 	$('#calendar').fullCalendar('changeView', 'month');
 }
 
@@ -175,8 +175,8 @@ function selectDayCalendar(){
 // Resets to the normal calendar
 function normalCalendar(){
 	$('#calendar').fullCalendar('option', initialCalendarOptions);
-	$('#pageTitle').removeClass("pageTitleMove");
-	$('#selectDayTitle').removeClass("selectDayTitleMove");
+	$('#pageTitle').css('left', '0');
+	$('#selectDayTitle').css('left', '-100%');
 }
 
 // <Samuel Livingston> 02-Jul-2017

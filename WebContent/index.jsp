@@ -32,28 +32,28 @@
 		  <!-- Modal content -->
 		  <div class="modal-content animate-zoom">
 		    <form id="eventForm" action="" class="">
-		    	<div class="event-title-group">
-			    	<input id="eventTitle" type="text" placeholder="Title" name="eventTitle">
+		    	<div class="title-group">
+			    	<input id="eventTitle" class="title" type="text" placeholder="Title" name="eventTitle">
 			    	<p class="error-message"></p>	
 		    	</div>
-		    	<div class="event-description-group">
+		    	<div class="desc-group">
 			    	<label for="eventDescription">Description</label>
 			    	<textarea id="eventDescription" placeholder="Description" name="eventDescription"></textarea>
 		    		<p class="error-message"></p>
 		    	</div>
-		    	<div class="event-date-group">
+		    	<div class="date-group">
 			    	<label for="eventStartDate">Date</label>
-			    	<input id="eventStartDate" class="input-date readonly" type="text" name="eventStartDate" readonly>
+			    	<input id="eventStartDate" class="date" type="text" name="eventStartDate" readonly>
 		    		<p class="error-message"></p>
 		    	</div>
-		    	<div class="event-start-time-group">
+		    	<div class="start-time-group">
 		    		<label for="eventStartTime">Start Time</label>
-		    		<select id="eventStartTime" class="time-selection" name="eventStartTime"></select>
+		    		<select id="eventStartTime" class="time" name="eventStartTime"></select>
 		    		<p class="error-message"></p>
 		    	</div>
-		    	<div class="event-end-time-group">
+		    	<div class="end-time-group">
 			    	<label for="eventEndTime">End Time</label>
-			    	<select id="eventEndTime" class="time-selection" name="eventEndTime"></select>
+			    	<select id="eventEndTime" class="time" name="eventEndTime"></select>
 		    		<p class="error-message"></p>
 		    	</div>
 		    	<div class="btn-group">
@@ -69,36 +69,36 @@
 		  <!-- Modal content -->
 		  <div class="modal-content animate-zoom">
 		    <form id="taskForm" action="" class="">			
-		    	<div class="task-title-group">
-		    		<input id="taskTitle" type="text" placeholder="Title">
+		    	<div class="title-group">
+		    		<input id="taskTitle" class="title" type="text" placeholder="Title">
 		    		<p class="error-message"></p>
 		    	</div>
-		    	<div class="task-description-group">
+		    	<div class="desc-group">
 		    		<label for="taskDescription">Description</label>
 		    		<textarea id="taskDescription" placeholder="Description"></textarea>
 		    		<p class="error-message"></p>
 		    	</div>
-		    	<div class="task-assign-date-group">
+		    	<div class="assign-date-group">
 		    		<label for="taskAssignDate">Assign Date</label>
-		    		<input id="taskAssignDate" class="input-date" type="text" placeholder="Click to select day" readonly >
+		    		<input id="taskAssignDate" class="date" type="text" placeholder="Click to select day" readonly >
 		    		<p class="error-message"></p>
 		    	</div>
-		    	<div class="task-assign-time-group">
+		    	<div class="assign-time-group">
 		    		<label for="taskAssignTime">Assign Time</label>
-		    		<select id="taskAssignTime" class="time-selection" name="taskAssignTime"></select>
+		    		<select id="taskAssignTime" class="time" name="taskAssignTime"></select>
 		    		<p class="error-message"></p>
 		    	</div>
-		    	<div class="task-due-date-group">
+		    	<div class="due-date-group">
 		    		<label for="taskDueDate">Due Date</label>
-		    		<input id="taskDueDate" class="input-date" type="text" placeholder="Click to select day" readonly>
+		    		<input id="taskDueDate" class="date" type="text" placeholder="Click to select day" readonly>
 		    		<p class="error-message"></p>
 		    	</div>
-		    	<div class="task-due-time-group">
+		    	<div class="due-time-group">
 			    	<label for="taskDueTime">Due Time</label>
-			    	<select id="taskDueTime" class="time-selection" name="taskDueTime"></select>
+			    	<select id="taskDueTime" class="time" name="taskDueTime"></select>
 		    		<p class="error-message"></p>
 		    	</div>
-		    	<div class="task-est-time-group">
+		    	<div class="est-time-group">
 		    		<label for="taskTimeToComplete">Time to Complete</label>
 		    		<div class="input-with-unit">
 			    		<input id="taskTimeToComplete" class="" type="number" name="quantity" min="15" max="1440" value="15" step="15" required>
@@ -106,7 +106,7 @@
 		    		</div>
 		    		<p class="error-message"></p>
 		    	</div>
-		    	<div class="task-priority-group">
+		    	<div class="priority-group">
 		    		<label for="taskPriority">Priority</label>
 		    		<input id="taskPriority" type="number" name="quantity" min="1" max="10" value="5">
 		    		<p class="error-message"></p>
@@ -122,8 +122,8 @@
 	</c:when>
 	<c:otherwise>
 		<div id="startPage">
-			<h2 class="start-page-title">Welcome to Auto Calendar!</h2>
-			<div id="login">
+			<h2 class="title">Welcome to Auto Calendar!</h2>
+			<div class="login-group">
 				<h3>Login</h3>
 				<form id="loginForm" action="Login" method="post">
 					<input id="username" type="text" name="username" placeholder="Username">
@@ -134,11 +134,12 @@
 			
 			<p class="or-divider">Or</p>
 			
-			<div id="signup">
+			<div class="signup-group">
 				<h3>Sign up</h3>
 				<form id="signupForm" action="Signup" method="post">
 					<input id="username" type="text" name="username" placeholder="Username">
 					<input id="password" type="password" name="password" placeholder="Password">
+					<input id="password2" type="password" name="password2" placeholder="Re-enter Password">
 					<input id="email" type="text" name="email" placeholder="Email">
 					<button class="btn-default btn-wide">Sign up</button>
 				</form>  
