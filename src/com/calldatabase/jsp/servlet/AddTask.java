@@ -17,6 +17,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.event.Task;
+import com.shedule.Schedule;
+
 
 
 
@@ -72,6 +75,8 @@ public class AddTask extends HttpServlet {
 		    
 		    
 		    //Send the parameters tim needs here.
+		    Task t = new Task();//To-Do: insert parameters
+		    Schedule s = new Schedule();
 		    
 		    
 		    //Get Tims response back.
