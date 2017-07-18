@@ -19,100 +19,141 @@ import org.json.JSONObject;
 
 public class Schedule {
 
-	private ArrayList<Event> schedule;
-	
+	private ArrayList<Time> schedule;
+	private ArrayList<Time> possibilities = new ArrayList<Time>();
+	private long[] best;
 
 	
-	public Schedule(ArrayList<Event> s)
+	public Schedule(ArrayList<Time> s)
 	{
 		schedule = s;
 	}
 	
 	public Schedule()
 	{
-		schedule = new ArrayList<Event>();
+		schedule = new ArrayList<Time>();
 		generateSchedule();
-		sortSchedule();
+		
 	}
 	
-	public ArrayList<Event> getSchedule()
+	public ArrayList<Time> getSchedule()
 	{
 		return schedule;
 	}
 	
 	public void addEventToSchedule(Event e, int index)
 	{
-		schedule.add(index, e);
+		
+		schedule.add(index,e.getStartTime());
+		schedule.add(index+1,e.getEndTime());
+				
 	}
 	
-	public void removeEventFromSchedule(Event e)
+	public void addEventToSchedule(Event e)
+	{
+		Time start = e.getStartTime();
+		Time end = e.getEndTime();
+		for(int i = 0; i<schedule.size(); i+=2)
+		{
+			if(end.before(schedule.get(i)))
+			{
+				schedule.add(i,start);
+				schedule.add(i+1,end);
+				return;
+			}
+		}
+		int i = schedule.size()-1;
+		if(schedule.get(i).before(start))
+		{
+			schedule.add(start);
+			schedule.add(end);
+		}
+				
+	}
+	
+	public void removeEventFromSchedule(Time e)
 	{
 		schedule.remove(e);
 	}
 	
-	public void addTaskToSchedule(Task T)
+	public Task addTaskToSchedule(Task T)
 	{
 		Time due = T.getDueDate();
 		Time assign = T.getAssignDate();
-		int length = T.getEstimatedLength();
-//		HashMap<Date,Time> possible = findViableTimes(due, assign, length);
-//		possible = eliminateOutliers(possible);
-		
+		long length = T.getEstimatedLength()*60000;
+		eliminateOutliers(assign, due);
+		findPossibleTimes(length);
+		long start = findBestPossibleTime(assign);
+		Time s =new Time(start);
+		T.setStartTime(s);
+		Time e = new Time(start+length);
+		T.setEndTime(e);
+		return T;
 	}
 	
-//	private HashMap<Date,Time> findViableTimes(Date due,Date assign,int length)
-//	{
-//		HashMap<Date,Time> possible = new HashMap<Date,Time>();
-//		
-//		for(int i = 0; i<schedule.size();i++)
-//		{
-//			Event e = schedule.get(i);
-//			if(e.getStartDate().after(due))
-//			{
-//				break;
-//			}
-//			if(e.getStartDate().after(assign)&& i< schedule.size()-1)
-//			{
-//				Event next = schedule.get(i+1);
-//				if((next.getStartTime().getTime()-5)-(e.getEndTime().getTime()+5) > length)
-//				{
-//					Date d = e.getEndDate();
-//					long temp = e.getEndTime().getTime()+5;
-//					Time t = new Time(temp);
-//					
-//					possible.put(d, t);
-//				}
-//			}
-//			else if(e.getStartDate().after(assign)&& i== schedule.size()-1)
-//			{
-//				Date d = e.getEndDate();
-//				long temp = e.getEndTime().getTime()+5;
-//				Time t = new Time(temp);
-//				
-//				possible.put(d, t);
-//				
-//			}
-//		}
-//		return possible;
-//	}
-	
-	@SuppressWarnings("rawtypes")
-	private HashMap<Date,Time> eliminateOutliers(HashMap<Date,Time> possible)
+	private void eliminateOutliers(Time ass, Time due)
 	{
-		Time morning = Time.valueOf("7:00:00");
-		Time night = Time.valueOf("22:00:00");
-		Iterator it = possible.entrySet().iterator();
-		while(it.hasNext())
+		for(int i =1; i< schedule.size(); i+=2)
 		{
-			Map.Entry pair = (Map.Entry)it.next();
-			if(morning.after(possible.get(pair.getKey()))&&night.before(possible.get(pair.getKey())))
+			if(ass.after(schedule.get(i)))
 			{
-				it.remove();
+				schedule.remove(i);
+				schedule.remove(i-1);
+				i-=2;
+			}
+			else if(due.before(schedule.get(i)))
+			{
+				schedule.remove(i);
+				schedule.remove(i-1);
+				i-=2;
+			}
+		}
+		
+	}
+	private void findPossibleTimes(long l)
+	{
+		long fiveMin = 5*60000;
+		for(int i =1; i< schedule.size()-1; i+=2)
+		{
+			if(l< (schedule.get(i+1).getTime()-schedule.get(i).getTime())-2*fiveMin)
+			{
+				Time t = new Time(schedule.get(i).getTime()+fiveMin);
+				possibilities.add(t);
 			}
 			
 		}
-		return possible;
 	}
+	
+	private long findBestPossibleTime(Time ass)
+	{
+		best = new long[possibilities.size()];
+		long focusTime = ass.getTime();
+		for(int i = 0; i< possibilities.size(); i++)
+		{
+			long possibleTime= possibilities.get(i).getTime();
+			if(Math.abs(possibleTime-focusTime)> Math.abs(possibleTime-focusTime+86400000))
+			{
+				focusTime+=86400000;
+				best[i] = (Math.abs(possibleTime-focusTime));
+				
+			}
+			else
+			{
+				best[i] = (Math.abs(possibleTime-focusTime));
+			}
+		}
+		long ans = 86400000;
+		for(long l:best)
+		{
+			if(l<ans)
+			{
+				ans = l;
+			}
+		}
+		
+		return ans;
+	}
+
 	
 	private void generateSchedule()
 	{
@@ -154,7 +195,7 @@ public class Schedule {
                             
                         }
                         Event e = new Event(start,end,title,des);
-                        schedule.add(e);
+                        addEventToSchedule(e);
                         
                     }
                     selectSql = "SELECT * FROM Task WHERE UserID=0";
@@ -177,19 +218,11 @@ public class Schedule {
                     			end= (Time) r.getObject(i+1);
                     		case "description":  column = "description";
                     			des = (String) r.getObject(i+1);
-                    		case "datedue":  column = "dueDate";
-                    			due = (Time) r.getObject(i+1);
-                    		case "priority":  column = "priority";
-                    			break;	
-                    		case "estimatedtime":  column = "timeToComplete";
-                    			et = (int) r.getObject(i+1);
-                    		case "assigndate":  column = "assignDate";
-                    			ass = (Time) r.getObject(i+1);
                         	}
                             
                         }
-                        Event e = new Task(start,end,title,des,due, et,ass);
-                        schedule.add(e);
+                        Event e = new Event(start,end,title,des);
+                        addEventToSchedule(e);
                 }
                 }
                 
@@ -201,25 +234,5 @@ public class Schedule {
                 e.printStackTrace();
         }
     }
-	
-	private void sortSchedule()
-	{
-		
-	        for (int i = 0; i < schedule.size(); i++) {
-	            for (int j = 0; j < schedule.size() - i - 1; j++) {
-	                if (schedule.get(j).getStartTime().after( schedule.get(j+1).getStartTime())) {
-	                    Event temp = schedule.get(j);
-	                    schedule.set(j, schedule.get(j+1));
-	                    schedule.set(j+1, temp);
-	                }
-	            }
-	        }
-	}
-		
-	
-
-	
-	
-	
-	
+			
 }
