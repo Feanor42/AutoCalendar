@@ -79,7 +79,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>Login</servlet-name>
-        <servlet-class>com.calldatabase.jsp.servlet.Login</servlet-class>
+        <servlet-class>com.authenticate.Login</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
