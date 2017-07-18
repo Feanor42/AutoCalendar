@@ -12,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,8 +27,10 @@ public class AddTask extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	 protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		//initializing variables
-		 	int UserID = 0;
+		 	HttpSession session = request.getSession(true);
+		 
+		 	//initializing variables
+		 	int UserID = (int) session.getAttribute("id");
 		 	int TaskID = 0;
 	        int EventType = 0;
 	        String Title = "";
@@ -53,7 +56,6 @@ public class AddTask extends HttpServlet {
 		    
 		    try {
 				jObj = new JSONObject(sb.toString());
-				UserID = 0;
 				EventType = jObj.getInt("eventType");
 				Title = jObj.getString("title");
 				Description = jObj.getString("description");
@@ -173,7 +175,9 @@ public class AddTask extends HttpServlet {
 	            		case "estimatedtime":  column = "timeToComplete";
 	            		break;	
 	            		case "assigndate":  column = "assignDate";
-	            		break;	
+	            		break;
+	            		case "userid":  column = "userid";
+	            		break;
 	            	}
 	                obj.put(column, resultSet.getObject(i + 1));
 	            }

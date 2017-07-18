@@ -22,7 +22,6 @@ import javax.servlet.http.HttpSession;
 //Login servlet
 public class Login extends HttpServlet {
 	
-	Map<String, String> DB = new HashMap<String, String>();
 	public static final String SALT = "my-salt-text";
 	
 	private static final long serialVersionUID = 1L;
@@ -37,9 +36,9 @@ public class Login extends HttpServlet {
 			//Login redirect
 			HttpSession session = request.getSession();
 			
-			demo.login(Username, Password);
+			//demo.login(Username, Password);
 			
-			if (demo.login(Username, Password) == true) {
+			if (demo.login(Username, Password, session) == true) {
 				session.setAttribute("username", Username);
 			}
 			else {
@@ -48,54 +47,16 @@ public class Login extends HttpServlet {
 			response.sendRedirect("index.jsp");
 	 }
 	 
-	
-	 public void signup(String username, String password, String email) {
-			String saltedPassword = SALT + password;
-			String hashedPassword = generateHash(saltedPassword);
-			
-	        String url = "jdbc:sqlserver://softwareengineeringuc.database.windows.net:1433;database=SoftwareEngineeringUC;user=ufkesba@softwareengineeringuc;password=Scout!2063;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
-	        Connection connection = null;
-	        String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-	        
-	        try {
-        	    Class.forName(driver).newInstance();
-                connection = DriverManager.getConnection(url);
-                String schema = connection.getSchema();
-
-                // Prepared statement to insert data
-                String insertSql = "INSERT INTO [User] (Username, Password, Email)"
-                		+ " VALUES (?,?,?)";
-                System.out.println(insertSql);
-				
-                //This will need to be changed to PreparedStatement
-                try (PreparedStatement statement = connection.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS)) {
-                	statement.setString(1, username);
-                	statement.setString(2, hashedPassword);
-                	statement.setString(3, email);
-
-                    int count = statement.executeUpdate();
-                    System.out.println("Inserted: " + count + " row(s)");
-                }
-        }
-        catch (Exception e) {
-                e.printStackTrace();
-        }
-			
-			
-			//Replace this with adding to User Database
-			//DB.put(username, hashedPassword);
-	}
 	 
-	public Boolean login(String username, String password) {
+	public Boolean login(String username, String password, HttpSession session) {
 			Boolean isAuthenticated = false;
 
 			// remember to use the same SALT value use used while storing password
 			// for the first time.
 			String saltedPassword = SALT + password;
 			String hashedPassword = generateHash(saltedPassword);
-
+			int userID = 0;
 			String storedPasswordHash = "";
-			//go get stored hashed password
 			
 	    	// Connect to database
 	        String url = "jdbc:sqlserver://softwareengineeringuc.database.windows.net:1433;database=SoftwareEngineeringUC;user=ufkesba@softwareengineeringuc;password=Scout!2063;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
@@ -108,15 +69,20 @@ public class Login extends HttpServlet {
                 String schema = connection.getSchema();
 				
              // Create and execute a SELECT SQL statement.
-                String selectSql = "SELECT Password FROM [User] WHERE CONVERT(VARCHAR,Username)='" + username + "'";
+                String selectSql = "SELECT * FROM [User] WHERE CONVERT(VARCHAR,Username)='" + username + "'";
                 System.out.println(selectSql);
 
                 try {
                 	Statement statement = connection.createStatement();
                     ResultSet resultSet = statement.executeQuery(selectSql);
                     
-                    while(resultSet.next())
-                    	storedPasswordHash = resultSet.getString(1);
+                    while(resultSet.next()){
+                    	userID = resultSet.getInt("ID");
+                    	storedPasswordHash = resultSet.getString("Password");
+                    	session.setAttribute("id", userID);
+                    	
+                    }
+                    System.out.println("[ID]: " + userID);
                     System.out.println("hashed: " + hashedPassword);
                     System.out.println("DB: " + storedPasswordHash);
                     
