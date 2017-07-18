@@ -32,6 +32,7 @@ public class Schedule {
 	{
 		schedule = new ArrayList<Event>();
 		generateSchedule();
+		sortSchedule();
 	}
 	
 	public ArrayList<Event> getSchedule()
@@ -200,6 +201,20 @@ public class Schedule {
                 e.printStackTrace();
         }
     }
+	
+	private void sortSchedule()
+	{
+		
+	        for (int i = 0; i < schedule.size(); i++) {
+	            for (int j = 0; j < schedule.size() - i - 1; j++) {
+	                if (schedule.get(j).getStartTime().after( schedule.get(j+1).getStartTime())) {
+	                    Event temp = schedule.get(j);
+	                    schedule.set(j, schedule.get(j+1));
+	                    schedule.set(j+1, temp);
+	                }
+	            }
+	        }
+	}
 		
 	
 

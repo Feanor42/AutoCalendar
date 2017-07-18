@@ -77,6 +77,7 @@ public class AddTask extends HttpServlet {
 		    //Send the parameters tim needs here.
 		    Task t = new Task();//To-Do: insert parameters
 		    Schedule s = new Schedule();
+		    s.addTaskToSchedule(t);
 		    
 		    
 		    //Get Tims response back.
