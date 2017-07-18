@@ -30,15 +30,21 @@ public class Signup extends HttpServlet {
 		 	//initializing variables
 		    String Username = request.getParameter("username");
 			String Password = request.getParameter("password");
+			String Password2 = request.getParameter("password2");
 			String Email = request.getParameter("email");
-		 
+			
 		 	Signup demo = new Signup();
-			demo.signup(Username, Password, Email);
 		 
 			//Login redirect
 			HttpSession session = request.getSession();
-			session.setAttribute("username", Username);
-		 
+			
+			if (Password.equals(Password2)) {
+				session.setAttribute("username", Username);
+				demo.signup(Username, Password, Email);
+			}
+			else {
+				session.setAttribute("signuperror", "Your password and confirmation password do not match.");
+			}
 			response.sendRedirect("index.jsp");
 	 }
 	 
