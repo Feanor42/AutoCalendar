@@ -648,6 +648,102 @@ function validateTaskData(){
 	return isValid;
 }
 
+// <Samuel Livingston> 18-Jul-2017
+// Login form submit callback
+$('#loginForm').off().submit(function(event){
+	if(validateLogin()){
+		return true;
+	}
+	else{
+		return false;
+	}
+});
+
+//Validate login input as user inputs data
+$('#loginForm').find("input").on('change input', function(){
+	validateLogin();
+});
+function validateLogin(){
+	var isValid = true;
+	
+	// Validate that there is a username
+	if($("#loginUsername").val() == ""){
+		$("#loginUsername").siblings('.error-message').html('Please enter a username');
+		isValid = false;
+	}
+	else{
+		$("#loginUsername").siblings('.error-message').html('');
+	}
+	
+	// Validate that there is a password
+	if($("#loginPassword").val() == ""){
+		$("#loginPassword").siblings('.error-message').html('Please enter a password');
+		isValid = false;
+	}
+	else{
+		$("#loginPassword").siblings('.error-message').html('');
+	}
+	
+	return isValid;
+}
+
+// <Samuel Livingston> 18-Jul-2017
+// Signup form submit callback
+$('#signupForm').off().submit(function(event){
+	if(validateSignup()){
+		return true;
+	}
+	else{
+		return false;
+	}
+});
+
+//Validate signup input as user inputs data
+$('#signupForm').find("input").on('change input', function(){
+	validateSignup();
+});
+function validateSignup(){
+	var isValid = true;
+	
+	// Validate that there is a username
+	if($("#signupUsername").val() == ""){
+		$("#signupUsername").siblings('.error-message').html('Please enter a username');
+		isValid = false;
+	}
+	else{
+		$("#signupUsername").siblings('.error-message').html('');
+	}
+	
+	// Validate that there is a password
+	if($("#signupPassword").val() == ""){
+		$("#signupPassword").siblings('.error-message').html('Please enter a password');
+		isValid = false;
+	}
+	else{
+		$("#signupPassword").siblings('.error-message').html('');
+	}
+	
+	// Validate that the second password matches the first
+	if($("#signupPassword2").val() != $("#signupPassword").val()){
+		$("#signupPassword2").siblings('.error-message').html('Passwords do not match');
+		isValid = false;
+	}
+	else{
+		$("#signupPassword2").siblings('.error-message').html('');
+	}
+	
+	// Validate that there is an email
+	if($("#signupEmail").val() == ""){
+		$("#signupEmail").siblings('.error-message').html('Please enter an email');
+		isValid = false;
+	}
+	else{
+		$("#signupEmail").siblings('.error-message').html('');
+	}
+	
+	return isValid;
+}
+
 function timeToDec(time){
 	var hoursMin = time.split(':');
 	var hours = Number(hoursMin[0]);

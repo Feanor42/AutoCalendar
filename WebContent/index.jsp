@@ -125,9 +125,22 @@
 			<h2 class="title">Welcome to Auto Calendar!</h2>
 			<div class="login-group">
 				<h3>Login</h3>
+				<c:choose>
+					<c:when test='${sessionScope["loginerror"] != null}'>
+						<p><c:out value="${sessionScope.loginerror}"/></p>
+						<c:set var="loginerror" scope="session" value=""/>  
+					</c:when>
+				</c:choose>
 				<form id="loginForm" action="Login" method="post">
-					<input id="username" type="text" name="username" placeholder="Username">
-					<input id="password" type="password" name="password" placeholder="Password">
+					<div class="username-group">	
+						<input id="loginUsername" type="text" name="username" placeholder="Username">
+						<p class="error-message"></p>
+					</div>
+					
+					<div class="password-group">	
+						<input id="loginPassword" type="password" name="password" placeholder="Password">
+						<p class="error-message"></p>
+					</div>	
 					<button class="btn-default btn-wide">Login</button>
 				</form> 
 			</div>
@@ -136,11 +149,29 @@
 			
 			<div class="signup-group">
 				<h3>Sign up</h3>
+				<c:choose>
+					<c:when test='${sessionScope["signuperror"] != null}'>
+						<p><c:out value="${sessionScope.signuperror}"/></p>
+						<c:set var="signuperror" scope="session" value=""/>  
+					</c:when>
+				</c:choose>
 				<form id="signupForm" action="Signup" method="post">
-					<input id="username" type="text" name="username" placeholder="Username">
-					<input id="password" type="password" name="password" placeholder="Password">
-					<input id="password2" type="password" name="password2" placeholder="Re-enter Password">
-					<input id="email" type="text" name="email" placeholder="Email">
+					<div class="username-group">
+						<input id="signupUsername" type="text" name="username" placeholder="Username">
+						<p class="error-message"></p>
+					</div>
+					<div class="password-group">
+						<input id="signupPassword" type="password" name="password" placeholder="Password">
+						<p class="error-message"></p>
+					</div>
+					<div class="password-group">
+						<input id="signupPassword2" type="password" name="password2" placeholder="Re-enter Password">
+						<p class="error-message"></p>
+					</div>
+					<div class="email-group">
+						<input id="signupEmail" type="text" name="email" placeholder="Email">
+						<p class="error-message"></p>
+					</div>
 					<button class="btn-default btn-wide">Sign up</button>
 				</form>  
 			</div>
