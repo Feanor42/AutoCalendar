@@ -60,7 +60,7 @@ function getTasks(){
 				var $option = $("<option>");
 				$option.val(addZero(hours[i]+off) + ':' + addZero(min).toString());
 				$option.html(addZero(hours[i]) + ':' + addZero(min).toString() + ampm);
-				$('.time-selection').append($option);
+				$('select.time').append($option);
 			}
 		}
 	}
@@ -88,12 +88,26 @@ var initialCalendarOptions = {
                 click: function() {
                     addTask();
                 }
+            },
+            logOut: {
+                text: 'Log out',
+                click: function() {
+                	var xhr = new XMLHttpRequest();
+            		var url = "LogOut";
+            		xhr.open("POST", url, true);
+            		xhr.onreadystatechange = function() {
+            		    if(xhr.readyState == 4 && xhr.status == 200) {
+            		    	location.reload();
+            		    }
+            		}
+            		xhr.send();
+                }
             }
         },
     	header:	{
     		left:   'prev,next addEvent addTask',
             center: 'title',
-            right:  'today month agendaWeek agendaDay'
+            right:  'today month agendaWeek agendaDay logOut'
     	},    	
     	eventClick: function(calElement, jsEvent, view) {
     		viewElement(calElement);
@@ -166,8 +180,8 @@ function Task(args){
 // Sets up calendar to allow user to select a day from the calendar. 
 function selectDayCalendar(){
 	$('#calendar').fullCalendar('option', selectDayCalendarOptions);
-	$('#pageTitle').addClass("pageTitleMove");
-	$('#selectDayTitle').addClass("selectDayTitleMove");
+	$('#pageTitle').css('left', '100%');
+	$('#selectDayTitle').css('left', '0');
 	$('#calendar').fullCalendar('changeView', 'month');
 }
 
@@ -175,8 +189,8 @@ function selectDayCalendar(){
 // Resets to the normal calendar
 function normalCalendar(){
 	$('#calendar').fullCalendar('option', initialCalendarOptions);
-	$('#pageTitle').removeClass("pageTitleMove");
-	$('#selectDayTitle').removeClass("selectDayTitleMove");
+	$('#pageTitle').css('left', '0');
+	$('#selectDayTitle').css('left', '-100%');
 }
 
 // <Samuel Livingston> 02-Jul-2017
@@ -643,6 +657,102 @@ function validateTaskData(){
 	}
 	else{
 		$("#taskTitle").siblings('.error-message').html('');
+	}
+	
+	return isValid;
+}
+
+// <Samuel Livingston> 18-Jul-2017
+// Login form submit callback
+$('#loginForm').off().submit(function(event){
+	if(validateLogin()){
+		return true;
+	}
+	else{
+		return false;
+	}
+});
+
+//Validate login input as user inputs data
+$('#loginForm').find("input").on('change input', function(){
+	validateLogin();
+});
+function validateLogin(){
+	var isValid = true;
+	
+	// Validate that there is a username
+	if($("#loginUsername").val() == ""){
+		$("#loginUsername").siblings('.error-message').html('Please enter a username');
+		isValid = false;
+	}
+	else{
+		$("#loginUsername").siblings('.error-message').html('');
+	}
+	
+	// Validate that there is a password
+	if($("#loginPassword").val() == ""){
+		$("#loginPassword").siblings('.error-message').html('Please enter a password');
+		isValid = false;
+	}
+	else{
+		$("#loginPassword").siblings('.error-message').html('');
+	}
+	
+	return isValid;
+}
+
+// <Samuel Livingston> 18-Jul-2017
+// Signup form submit callback
+$('#signupForm').off().submit(function(event){
+	if(validateSignup()){
+		return true;
+	}
+	else{
+		return false;
+	}
+});
+
+//Validate signup input as user inputs data
+$('#signupForm').find("input").on('change input', function(){
+	validateSignup();
+});
+function validateSignup(){
+	var isValid = true;
+	
+	// Validate that there is a username
+	if($("#signupUsername").val() == ""){
+		$("#signupUsername").siblings('.error-message').html('Please enter a username');
+		isValid = false;
+	}
+	else{
+		$("#signupUsername").siblings('.error-message').html('');
+	}
+	
+	// Validate that there is a password
+	if($("#signupPassword").val() == ""){
+		$("#signupPassword").siblings('.error-message').html('Please enter a password');
+		isValid = false;
+	}
+	else{
+		$("#signupPassword").siblings('.error-message').html('');
+	}
+	
+	// Validate that the second password matches the first
+	if($("#signupPassword2").val() != $("#signupPassword").val()){
+		$("#signupPassword2").siblings('.error-message').html('Passwords do not match');
+		isValid = false;
+	}
+	else{
+		$("#signupPassword2").siblings('.error-message').html('');
+	}
+	
+	// Validate that there is an email
+	if($("#signupEmail").val() == ""){
+		$("#signupEmail").siblings('.error-message').html('Please enter an email');
+		isValid = false;
+	}
+	else{
+		$("#signupEmail").siblings('.error-message').html('');
 	}
 	
 	return isValid;
