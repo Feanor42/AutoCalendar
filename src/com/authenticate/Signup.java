@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +41,7 @@ public class Signup extends HttpServlet {
 			
 			if (Password.equals(Password2)) {
 				session.setAttribute("username", Username);
-				demo.signup(Username, Password, Email);
+				demo.signup(Username, Password, Email, session);
 			}
 			else {
 				session.setAttribute("signuperror", "Your password and confirmation password do not match.");
@@ -49,10 +50,12 @@ public class Signup extends HttpServlet {
 	 }
 	 
 	
-	 public void signup(String username, String password, String email) {
+	 public void signup(String username, String password, String email, HttpSession session) {
 			String saltedPassword = SALT + password;
 			String hashedPassword = generateHash(saltedPassword);
+			int userID;
 			
+			//Connect to database
 	        String url = "jdbc:sqlserver://softwareengineeringuc.database.windows.net:1433;database=SoftwareEngineeringUC;user=ufkesba@softwareengineeringuc;password=Scout!2063;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
 	        Connection connection = null;
 	        String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
@@ -75,6 +78,14 @@ public class Signup extends HttpServlet {
 
                     int count = statement.executeUpdate();
                     System.out.println("Inserted: " + count + " row(s)");
+                    
+                    ResultSet rs = statement.getGeneratedKeys();
+                    if (rs.next()) {
+                        userID=rs.getInt(1);   
+                        System.out.println("New User Added ID: " + userID); 
+                        session.setAttribute("id", userID);
+                    }
+                    
                 }
         }
         catch (Exception e) {
