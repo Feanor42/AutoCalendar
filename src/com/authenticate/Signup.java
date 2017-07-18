@@ -79,6 +79,7 @@ public class Signup extends HttpServlet {
                     int count = statement.executeUpdate();
                     System.out.println("Inserted: " + count + " row(s)");
                     
+                  //After Query, save the auto generated UserID to be sent back
                     ResultSet rs = statement.getGeneratedKeys();
                     if (rs.next()) {
                         userID=rs.getInt(1);   
