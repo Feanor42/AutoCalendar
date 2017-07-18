@@ -22,7 +22,11 @@ public class GetTasks extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		HttpSession session = request.getSession(true);
-		int userID = (int) session.getAttribute("id");
+		int userID = 0;
+		
+		if (session.getAttribute("id") != null) {
+			userID = (int) session.getAttribute("id");
+		}
 		
 		// Connect to database
 		String url = "jdbc:sqlserver://softwareengineeringuc.database.windows.net:1433;database=SoftwareEngineeringUC;user=ufkesba@softwareengineeringuc;password=Scout!2063;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";

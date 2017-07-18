@@ -20,9 +20,13 @@ public class GetEvents extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+		
 		HttpSession session = request.getSession(true);
-		int userID = (int) session.getAttribute("id");
+		int userID = 0;
+		
+		if (session.getAttribute("id") != null) {
+			userID = (int) session.getAttribute("id");
+		}
 		
 		System.out.println("sessionid: " + userID);
 		
