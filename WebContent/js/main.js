@@ -88,12 +88,25 @@ var initialCalendarOptions = {
                 click: function() {
                     addTask();
                 }
+            },
+            logOut: {
+                text: 'Log out',
+                click: function() {
+                	var xhr = new XMLHttpRequest();
+            		var url = "LogOut";
+            		xhr.open("POST", url, true);
+            		xhr.onreadystatechange = function() {
+            		    if(xhr.readyState == 4 && xhr.status == 200) {
+            		    }
+            		}
+            		xhr.send();
+                }
             }
         },
     	header:	{
     		left:   'prev,next addEvent addTask',
             center: 'title',
-            right:  'today month agendaWeek agendaDay'
+            right:  'today month agendaWeek agendaDay logOut'
     	},    	
     	eventClick: function(calElement, jsEvent, view) {
     		viewElement(calElement);
