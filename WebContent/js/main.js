@@ -97,6 +97,7 @@ var initialCalendarOptions = {
             		xhr.open("POST", url, true);
             		xhr.onreadystatechange = function() {
             		    if(xhr.readyState == 4 && xhr.status == 200) {
+            		    	location.reload();
             		    }
             		}
             		xhr.send();
