@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONObject;
 import org.json.JSONArray;
@@ -19,8 +20,15 @@ public class GetTasks extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	// Connect to database
-        
+		
+		HttpSession session = request.getSession(true);
+		int userID = 0;
+		
+		if (session.getAttribute("id") != null) {
+			userID = (int) session.getAttribute("id");
+		}
+		
+		// Connect to database
 		String url = "jdbc:sqlserver://softwareengineeringuc.database.windows.net:1433;database=SoftwareEngineeringUC;user=ufkesba@softwareengineeringuc;password=Scout!2063;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
         Connection connection = null;
         String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
@@ -31,7 +39,7 @@ public class GetTasks extends HttpServlet {
                 String schema = connection.getSchema();
 
                 // Create and execute a SELECT SQL statement.
-                String selectSql = "SELECT * FROM Task WHERE UserID=0";
+                String selectSql = "SELECT * FROM Task WHERE UserID=" + userID;
 
                 try {
                 	Statement statement = connection.createStatement();
