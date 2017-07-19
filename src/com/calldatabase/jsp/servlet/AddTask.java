@@ -18,9 +18,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.event.Task;
-import com.shedule.Schedule;
-
 
 
 
@@ -77,14 +74,11 @@ public class AddTask extends HttpServlet {
 		    
 		    
 		    //Send the parameters tim needs here.
-		    Task t = new Task();//To-Do: insert parameters
-		    Schedule s = new Schedule();
-		    t =s.addTaskToSchedule(t);
 		    
 		    
 		    //Get Tims response back.
-		    DateTimeStart = t.getStartTime().toString();
-		    DateTimeEnd = t.getEndTime().toString();
+		    
+		    
 		 
 	    	// Connect to database
 	        String url = "jdbc:sqlserver://softwareengineeringuc.database.windows.net:1433;database=SoftwareEngineeringUC;user=ufkesba@softwareengineeringuc;password=Scout!2063;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";

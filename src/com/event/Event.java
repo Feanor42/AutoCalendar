@@ -7,13 +7,14 @@ import java.sql.Time;
 
 public class Event {
 	
+	
 	private Date startDate;
 	private Date endDate;
 	private Time startTime;
 	private Time endTime;
 	private String title;
 	private String description;
-
+	private String location;
 	
 	
 	//default constructer
@@ -25,35 +26,34 @@ public class Event {
 		endTime = null;
 		title = "";
 		description = "";
-
+		location = "";
+		
 		
 	}
-	public Event(String tit, String des)
-	{
-		startDate = null;
-		endDate = null;
-		startTime = null;
-		endTime = null;
-		title = tit;
-		description = des;
-
-		
-	}
+	
 	//Overloaded constructer
-	public Event(Time st, Time et, String tit, String desc)
+	public Event(Date sd, Date ed, Time st, Time et, String tit, String desc, String loc)
 	{
-		
+		startDate = sd;
+		endDate = ed;
 		startTime = st;
 		endTime = et;
 		title = tit;
 		description = desc;
+		location = loc;
 		
 		
 	}
 	
+	public Date getStartDate()
+	{
+		return startDate;
+	}
 	
-	
-	
+	public Date getEndDate()
+	{
+		return endDate;
+	}
 	
 	public Time getStartTime()
 	{
@@ -75,6 +75,22 @@ public class Event {
 		return description;
 	}
 	
+	public String getLocation()
+	{
+		return location;
+	}
+	
+	
+	
+	public void setStartDate(Date d)
+	{
+		startDate = d;
+	}
+	
+	public void setEndDate(Date d)
+	{
+		endDate = d;
+	}
 	
 	public void setStartTime(Time t)
 	{
@@ -96,7 +112,10 @@ public class Event {
 		description = desc;
 	}
 	
-
+	public void setLocation(String l)
+	{
+		location = l;
+	}
 	
 //	public Time getLength()
 //	{

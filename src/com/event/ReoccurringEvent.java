@@ -24,14 +24,14 @@ public class ReoccurringEvent extends Event{
 	 * b begining date of the period
 	 * f final date of the period
 	 */
-//	public ReoccurringEvent(Date sd, Date ed, Time st, Time et, String tit, String desc, String loc,  Boolean[] d, Date b, Date f)
-//	{
-//		super( sd, ed, st, et, tit, desc, loc);
-//		days = d;
-//		begin = b;
-//		finish = f;
-//	}
-//	
+	public ReoccurringEvent(Date sd, Date ed, Time st, Time et, String tit, String desc, String loc,  Boolean[] d, Date b, Date f)
+	{
+		super( sd, ed, st, et, tit, desc, loc);
+		days = d;
+		begin = b;
+		finish = f;
+	}
+	
 	/*
 	 * get the days of the week
 	 */
@@ -79,17 +79,17 @@ public class ReoccurringEvent extends Event{
 //		
 //	}
 	
-//	public void updateReoccurences(List<Event> reoccurrences)
-//	{
-//		for(Event e: reoccurrences)
-//		{
-//			e.setTitle(this.getTitle());
-//			e.setLocation(this.getLocation());
-//			e.setDescription(this.getDescription());
-//			e.setStartTime(this.getStartTime());
-//			e.setEndTime(this.getEndTime());	
-//		}
-//	}
+	public void updateReoccurences(List<Event> reoccurrences)
+	{
+		for(Event e: reoccurrences)
+		{
+			e.setTitle(this.getTitle());
+			e.setLocation(this.getLocation());
+			e.setDescription(this.getDescription());
+			e.setStartTime(this.getStartTime());
+			e.setEndTime(this.getEndTime());	
+		}
+	}
 }
 
 

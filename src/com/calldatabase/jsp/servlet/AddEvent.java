@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.sql.Timestamp;
 
 import javax.servlet.ServletException;
@@ -13,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -30,11 +33,9 @@ public class AddEvent extends HttpServlet {
 		 	//initializing variables
 		 	int UserID = (int) session.getAttribute("id");
 		 	int EventID = 0;
-
 	        int EventType = 1;
-	        String Title = "SampleEvent";
-	        String Description = "SampleDescription";
-	        String Location = "Campus";
+	        String Title = "";
+	        String Description = "";
 	        String DateTimeStart = "";
 	        String DateTimeEnd = "";
 		 
@@ -45,7 +46,6 @@ public class AddEvent extends HttpServlet {
 		    
 		    JSONObject jObj;
 		    
-		    
 		    //updating parameters
 		    while( (str = br.readLine()) != null ){
 		        sb.append(str);
@@ -55,12 +55,10 @@ public class AddEvent extends HttpServlet {
 				jObj = new JSONObject(sb.toString());
 				Title = jObj.getString("title");
 				Description = jObj.getString("description");
-				Location = jObj.getString("location");
 				DateTimeStart = jObj.getString("start");
 				DateTimeEnd = jObj.getString("end");
 				
 			} catch (JSONException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		    
@@ -82,30 +80,31 @@ public class AddEvent extends HttpServlet {
 	                System.out.println(insertSql);
 					
 	                //This will need to be changed to PreparedStatement
-	                try (PreparedStatement statement = connection.prepareStatement(insertSql)) {
+	                try (PreparedStatement statement = connection.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS)) {
 	                	statement.setInt(1, UserID);
-	                	//statement.setString(2, EventID);
 	                	statement.setInt(2, EventType);
 	                	statement.setString(3, Title);
 	                	statement.setString(4, Description);
-	                	//statement.setString(5, Location);
 	                	statement.setString(5, DateTimeStart);
 	                	statement.setString(6, DateTimeEnd);
 
                         int count = statement.executeUpdate();
                         System.out.println("Inserted: " + count + " row(s)");
-	                
+                        
+                        //After Query, save the auto generated EventID to be sent back
+                        ResultSet rs = statement.getGeneratedKeys();
+                        if (rs.next()) {
+                            EventID=rs.getInt(1);   
+                                    System.out.println("Auto Generated Primary Key " + EventID); 
+                         }
+       
 	                }
-	                queryResult = insertSql;
 	        }
 	        catch (Exception e) {
 	                e.printStackTrace();
 	        }
-	        
-	    	response.setContentType("text/plain");
-	    	response.setCharacterEncoding("UTF-8");
-	    	response.getWriter().write(queryResult);
 	             
+	    	
 	    	//After event was added, send JSONArray of it back as response
             String selectSql = "SELECT * FROM Event WHERE EventID=" + EventID;
             System.out.println(selectSql);
@@ -156,5 +155,9 @@ public class AddEvent extends HttpServlet {
 	            }
 	            jsonArray.put(obj);
 	        }
-	
+	        
+	        // Show json Array as a string
+	        return jsonArray;
+	        
+	    }
 }
