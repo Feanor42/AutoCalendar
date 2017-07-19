@@ -13,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,8 +25,10 @@ public class EditEvent extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	 protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		//initializing variables
-		 	int UserID = 0;
+		 	HttpSession session = request.getSession(true);
+		 
+		 	//initializing variables
+		 	int UserID = (int) session.getAttribute("id");
 		 	int EventID = 0;
 	        int EventType = 1;
 	        String Title = "";
@@ -48,7 +51,6 @@ public class EditEvent extends HttpServlet {
 		    
 		    try {
 				jObj = new JSONObject(sb.toString());
-				UserID = 0;
 				EventID = jObj.getInt("id");
 				Title = jObj.getString("title");
 				Description = jObj.getString("description");
@@ -140,7 +142,9 @@ public class EditEvent extends HttpServlet {
 	            		case "eventtype":  column = "eventType";
 	            		break;
 	            		case "description":  column = "description";
-	            		break;	
+	            		break;
+	            		case "userid":  column = "userid";
+	            		break;
 	            	}
 	                obj.put(column, resultSet.getObject(i + 1));
 	            }

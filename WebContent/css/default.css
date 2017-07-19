@@ -1,100 +1,111 @@
-* {
-	box-sizing: border-box;
-}
+@import url("reset.css");
+@import url("global.css");
 
-body {
-	margin: 0;
-	font-family: Arial, Helvetica, sans-serif;
-	height: 100%;
-	width: 100%;
-	overflow-x: hidden;
-}
 .body {
 	overflow-x: hidden;
+	display: grid;
+  	grid-template-columns: repeat(3, 1fr);
+  	grid-gap: 0 10px;
+  	grid-template-areas: "header 	 header     header"
+  						 "start-page start-page start-page"
+  						 "calendar   calendar   calendar";
 }
 
-/* Style text inputs */
-input[type=text],textarea{
+/* Style inputs */
+.btn-group {
+	grid-area: btn-group;
+}
+#eventForm .title-group {
+	grid-area: event-title;
+}
+#eventForm .desc-group {
+	grid-area: event-desc;
+}
+#eventForm .date-group {
+	grid-area: event-date;
+}
+#eventForm .start-time-group {
+	grid-area: event-start-time;
+}
+#eventForm .end-time-group {
+	grid-area: event-end-time;
+}
+#eventForm {
+	display: grid;
+	grid-gap: 5px 5px;
+	grid-template-columns: repeat(3, 1fr);
+	grid-template-areas: "event-title 	event-title       event-title"
+						 "event-desc 	event-desc 	      event-desc"
+						 "event-date 	event-start-time  event-end-time"
+						 "btn-group 	btn-group 		  btn-group";
+}
+#taskForm .title-group {
+	grid-area: task-title;
+}
+#taskForm .desc-group {
+	grid-area: task-desc;
+}
+#taskForm .assign-date-group {
+	grid-area: task-assign-date;
+}
+#taskForm .due-date-group {
+	grid-area: task-due-date;
+}
+#taskForm .assign-time-group {
+	grid-area: task-assign-time;
+}
+#taskForm .due-time-group {
+	grid-area: task-due-time;
+}
+#taskForm .est-time-group {
+	grid-area: task-est-time;
+}
+#taskForm .priority-group {
+	grid-area: task-priority;
+}
+#taskForm {
+	display: grid;
+	grid-gap: 5px 5px;
+	grid-template-columns: repeat(2, 1fr);
+	grid-template-areas: "task-title 		task-title"
+						 "task-desc 		task-desc"
+						 "task-assign-date 	task-assign-time"
+						 "task-due-date		task-due-time"
+						 "task-est-time		task-priority"	
+						 "btn-group 		btn-group";
+}
+
+select.time {
 	width: 100%;
-    padding: 10px 10px;
-    margin: 4px 0 4px 0;
-    display: block;
-    border: 1px solid #ccc;
-    font-size: 1em;
 }
-input[type=number] {
-	padding: 10px;
-	margin: 4px 0 4px 0;
-	display: block;
-	border: 1px solid #ccc;
-	font-size: 1em;
-}
-.time-selection {
-	padding: 10px;
-	margin: 4px 0 4px 0;
-	display: block;
-	border: 1px solid #ccc;
-	font-size: 1em;
-}
-textarea {
-	resize: none;
-    overflow-y: scroll;
-    font-family: Arial, Helvetica, sans-serif;
-}
-label {
-	font-size: 1.1em;
-	display: block;
-	text-align: left;
-}
-.error-message {
-    margin: 0;
-    color: #ff0000;
-    text-align: left;
-    font-size: 0.9em;
-}
-#eventTitle, #taskTitle {
+input.title {
 	font-size: 2em;
 	margin: 4px auto 4px auto;
 	color: #000;
 	text-align: center;
 }
-.input-date {
+input.date {
 	text-align: center;
 	cursor: pointer;
+}
+.error-message {
+    color: #ff0000;
+    text-align: left;
+    font-size: 0.9em;
 }
 .unit {
 	align-self: center;
 	text-align: left;
 }
+.input-with-unit {
+	display: grid;
+	grid-template-columns: 75% auto;
+	grid-column-gap: 5px;
+}
 
 /* Style Buttons */
-.btn-default {
-	background-color: #f5f5f5;
-    color: #000;
-    display: inline-block;
-    cursor: pointer;
-    padding: 0 0.6em;
-    height: 2.1em;
-    border-style: solid;
-    border-width: 1px;
-    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-    border-radius: 4px;
-    font-size: 1.1em;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
-    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
-    background-image: linear-gradient(to bottom, #ffffff, #e6e6e6);
-    background-repeat: repeat-x;
-    
-}
-.btn-default:hover {
-	background-position: 0 -15px;
-    transition: background-position 0.1s linear;
-    background-color: #e6e6e6;
-}
-.btn-default:active {
-    background-color: #cccccc;
-    background-image: none;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+.btn-wide {
+	width: 100%;
 }
 
 /* Header */
@@ -103,51 +114,34 @@ label {
 	width: 100%;
 	margin-bottom: 1.75em; 
 	position: relative;
+	grid-area: header;
 }
-.title {
+.header > .title {
 	position: absolute;
 	text-align: center;
 	color: #fff;
-	margin: 0;
-	font-size: 3em;
 	line-height: 100px;
 	width: 100%;
 }
 #pageTitle {
-	background-color: #00a534;
+	background-color: #00a534; /* Green */
 	left: 0;
 	transition: all .3s ease-out;
 }
+
 #selectDayTitle {
-	background-color: rgb(220, 9, 9);
+	background-color: #dc0909; /* Red */
 	left: -100%;
 	transition: all .3s ease-out;
-}
-.selectDayTitleMove {
-	left: 0 !important;
-}
-.pageTitleMove {
-	left: 100% !important;
 }
 
 /* Calendar */
 #calendar {
 	padding: 0 25px;
+	grid-area: calendar;
 }
 .fc-event{
     cursor: pointer;
-}
-
-/* Select Day */
-#selectDayHeader {
-	position: absolute;
-	width: 100%;
-	display: none;
-	top: 0px;
-	text-align: center;
-	background-color: rgb(220, 9, 9);
-	z-index: 1;
-	vertical-align: middle;
 }
 
 /* The Modal (background) */
@@ -203,16 +197,39 @@ label {
     to {opacity: 1}
 }
 
-/* Slide Animation */
-.animate-fade {
-    -webkit-animation: animateslide 0.3s;
-    animation: animateslide 0.3s
+/* Login Form and Sign up Form */
+.login-group form {
+	text-align: center;
+	margin: 0 auto;
 }
-@-webkit-keyframes animateslide {
-    from {left: -100%;} 
-    to {left: 0}
+
+.login-group {
+	text-align: center;
+	grid-column: 1/2;
+	width: 90%;
+	justify-self: center;
 }
-@keyframes animateslide {
-    from {left: -100%;} 
-    to {left: 0}
+
+.signup-group form {
+	text-align: center;
+	margin: 0 auto;
+}
+
+.signup-group {
+	text-align: center;
+	grid-column: 3/4;
+	width: 90%;
+	justify-self: center;
+}
+#startPage {
+	grid-area: start-page;
+	display: grid;
+	grid-template-columns: 1fr auto 1fr;
+}
+#startPage .title {
+	grid-column: 1/4;
+	text-align: center;
+}
+.or-divider {
+	align-self: center;
 }
