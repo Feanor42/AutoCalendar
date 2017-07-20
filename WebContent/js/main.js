@@ -479,8 +479,8 @@ function editTask(calTask){
 		$("#taskModal").css("display", "none");
 		calTask.title = $("#taskTitle").val();
 		calTask.description = $("#taskDescription").val();
-		calTask.start = moment($("#taskAssignDate").val() + ' ' + $("#taskAssignTime").val(), "MM/DD/YYYY HH:mm");
-		calTask.end = moment($("#taskDueDate").val() + ' ' +  $("#taskDueTime").val(), "MM/DD/YYYY HH:mm");
+		//calTask.start = moment($("#taskAssignDate").val() + ' ' + $("#taskAssignTime").val(), "MM/DD/YYYY HH:mm");
+		//calTask.end = moment($("#taskDueDate").val() + ' ' +  $("#taskDueTime").val(), "MM/DD/YYYY HH:mm");
 		calTask.assignDate = moment($("#taskAssignDate").val() + ' ' + $("#taskAssignTime").val(), "MM/DD/YYYY HH:mm");
 		calTask.dueDate = moment($("#taskDueDate").val() + ' ' + $("#taskDueTime").val(), "MM/DD/YYYY HH:mm");
 		calTask.priority = $("#taskPriority").val();

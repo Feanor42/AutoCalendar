@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Timestamp;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -75,11 +76,16 @@ public class AddTask extends HttpServlet {
 				e1.printStackTrace();
 			}
 		    
+		    Timestamp start = Timestamp.valueOf(DateTimeStart);
+		    Timestamp end = Timestamp.valueOf(DateTimeEnd);
+		    Timestamp assign = Timestamp.valueOf(AssignDate);
+		    Timestamp due = Timestamp.valueOf(DateTimeDue);
+		    int estTime = Integer.parseInt(TimeToComplete);
 		    
 		    //Send the parameters tim needs here.
-		    Task t = new Task();//To-Do: insert parameters
-		    Schedule s = new Schedule();
-		    t =s.addTaskToSchedule(t);
+		    Task t = new Task(start, end, Title, Description, due, estTime, assign);
+		    Schedule s = new Schedule(UserID);
+		    t = s.addTaskToSchedule(t);
 		    
 		    
 		    //Get Tims response back.
