@@ -2,67 +2,59 @@ package com.event;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.sql.Timestamp;
 
 
 
 public class Event {
 	
-	
-	private Date startDate;
-	private Date endDate;
-	private Time startTime;
-	private Time endTime;
+	private Timestamp start;
+	private Timestamp end;
 	private String title;
 	private String description;
-	private String location;
+
 	
 	
 	//default constructer
 	public Event()
 	{
-		startDate = null;
-		endDate = null;
-		startTime = null;
-		endTime = null;
+		start = null;
+		end = null;
 		title = "";
 		description = "";
-		location = "";
-		
+
 		
 	}
-	
-	//Overloaded constructer
-	public Event(Date sd, Date ed, Time st, Time et, String tit, String desc, String loc)
+	public Event(String tit, String des)
 	{
-		startDate = sd;
-		endDate = ed;
-		startTime = st;
-		endTime = et;
+		start = null;
+		end = null;
+		title = tit;
+		description = des;
+
+		
+	}
+	//Overloaded constructer
+	public Event(Timestamp st, Timestamp et, String tit, String desc)
+	{
+		
+		start = st;
+		end = et;
 		title = tit;
 		description = desc;
-		location = loc;
 		
 		
 	}
 	
-	public Date getStartDate()
+	
+	public Timestamp getStartTime()
 	{
-		return startDate;
+		return start;
 	}
 	
-	public Date getEndDate()
+	public Timestamp getEndTime()
 	{
-		return endDate;
-	}
-	
-	public Time getStartTime()
-	{
-		return startTime;
-	}
-	
-	public Time getEndTime()
-	{
-		return endTime;
+		return end;
 	}
 	
 	public String getTitle()
@@ -75,31 +67,15 @@ public class Event {
 		return description;
 	}
 	
-	public String getLocation()
+	
+	public void setStartTime(Timestamp t)
 	{
-		return location;
+		start = t;
 	}
 	
-	
-	
-	public void setStartDate(Date d)
+	public void setEndTime(Timestamp t)
 	{
-		startDate = d;
-	}
-	
-	public void setEndDate(Date d)
-	{
-		endDate = d;
-	}
-	
-	public void setStartTime(Time t)
-	{
-		startTime = t;
-	}
-	
-	public void setEndTime(Time t)
-	{
-		endTime = t;
+		end = t;
 	}
 	
 	public void setTitle(String tit)
@@ -112,10 +88,7 @@ public class Event {
 		description = desc;
 	}
 	
-	public void setLocation(String l)
-	{
-		location = l;
-	}
+
 	
 //	public Time getLength()
 //	{

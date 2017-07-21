@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Timestamp;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,6 +18,9 @@ import javax.servlet.http.HttpSession;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.event.Task;
+import com.shedule.Schedule;
 
 
 
@@ -72,13 +76,21 @@ public class AddTask extends HttpServlet {
 				e1.printStackTrace();
 			}
 		    
+		    Timestamp start = Timestamp.valueOf(DateTimeStart);
+		    Timestamp end = Timestamp.valueOf(DateTimeEnd);
+		    Timestamp assign = Timestamp.valueOf(AssignDate);
+		    Timestamp due = Timestamp.valueOf(DateTimeDue);
+		    int estTime = Integer.parseInt(TimeToComplete);
 		    
 		    //Send the parameters tim needs here.
+		    Task t = new Task(start, end, Title, Description, due, estTime, assign);
+		    Schedule s = new Schedule(UserID);
+		    t = s.addTaskToSchedule(t);
 		    
 		    
 		    //Get Tims response back.
-		    
-		    
+		    DateTimeStart = t.getStartTime().toString();
+		    DateTimeEnd = t.getEndTime().toString();
 		 
 	    	// Connect to database
 	        String url = "jdbc:sqlserver://softwareengineeringuc.database.windows.net:1433;database=SoftwareEngineeringUC;user=ufkesba@softwareengineeringuc;password=Scout!2063;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
