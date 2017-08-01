@@ -1,3 +1,13 @@
+/*
+GetEvents.java
+This file gets all the events in the database based on userID and returns them as
+a JSONArray to the front-end
+	 
+Name           Date             Description of change
+----------------------------------------------------------------------------
+ Brent Ufkes   09-July-2017     Initial Creation
+*/
+
 package com.calldatabase.jsp.servlet;
 
 import java.io.IOException;
@@ -16,9 +26,17 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 
 
+//<Brent Ufkes> 09-July-2017
+//Get events servlet
 public class GetEvents extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+	// <Brent Ufkes> 09-July-2017
+	// Runs when front-end calls a GET on GetEvents
+	//
+	// Input: HTTPServletRequest
+	// Output: HTTPServletResponse, sent as a JSONArray in the format of a string
+	// Return: Returns the HTTPServletRequest back to the front-end
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		HttpSession session = request.getSession(true);
@@ -36,30 +54,37 @@ public class GetEvents extends HttpServlet {
         String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
 
         try {
-        		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-                connection = DriverManager.getConnection(url);
-                String schema = connection.getSchema();
+        	Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            connection = DriverManager.getConnection(url);
+            String schema = connection.getSchema();
 
-                // Create and execute a SELECT SQL statement.
-                String selectSql = "SELECT * FROM Event WHERE UserID=" + userID;
+            // Create and execute a SELECT SQL statement.
+            String selectSql = "SELECT * FROM Event WHERE UserID=" + userID;
 
-                try {
-                	Statement statement = connection.createStatement();
-                    ResultSet resultSet = statement.executeQuery(selectSql);
-                    response.getWriter().write(convertToJSON(resultSet).toString());
-                }
-                catch (Exception e) {
-                    e.printStackTrace();
-                }
+            try {
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(selectSql);
+                response.getWriter().write(convertToJSON(resultSet).toString());
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         catch (Exception e) {
-                e.printStackTrace();
+            e.printStackTrace();
         }
     }
     
-    public static JSONArray convertToJSON(ResultSet resultSet)
-            throws Exception {
+	// <Brent Ufkes> 09-July-2017
+	// Converts ResultSet from SQL Query to JSONArray
+	//
+	// Input: ResultSet from SQL
+	// Output: JSONArray
+	// Return: Output variable returned to caller
+    public static JSONArray convertToJSON(ResultSet resultSet) throws Exception {
+    	
         JSONArray jsonArray = new JSONArray();
+        
         while (resultSet.next()) {
             int rows = resultSet.getMetaData().getColumnCount();
             JSONObject obj = new JSONObject();
@@ -89,4 +114,3 @@ public class GetEvents extends HttpServlet {
         
     }
 }
-
