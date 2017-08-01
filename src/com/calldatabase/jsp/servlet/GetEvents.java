@@ -102,7 +102,7 @@ public class GetEvents extends HttpServlet {
             		case "eventtype":  column = "eventType";
             		break;
             		case "description":  column = "description";
-            		break;	
+            		break;
             	}
                 obj.put(column, resultSet.getObject(i + 1));
             }
